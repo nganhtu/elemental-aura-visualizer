@@ -44,12 +44,14 @@ def draw_element_btns():
 def draw_gauge_btns():
     global board, screen
     font = pg.font.Font(path.FONT['zh-cn'], GAUS)
-    img = font.render("1A", True, TXTC_SELECTED if board.gauge == 1 else TXTC)
+    img = font.render("1U", True, TXTC_SELECTED if board.gauge == 1 else TXTC)
     screen.blit(img, (SCRW - MARGIN - GPAD * 3, SCRH - MARGIN - GAUB))
-    img = font.render("2B", True, TXTC_SELECTED if board.gauge == 2 else TXTC)
+    img = font.render("2U", True, TXTC_SELECTED if board.gauge == 2 else TXTC)
     screen.blit(img, (SCRW - MARGIN - GPAD * 2, SCRH - MARGIN - GAUB))
-    img = font.render("4C", True, TXTC_SELECTED if board.gauge == 4 else TXTC)
+    img = font.render("4U", True, TXTC_SELECTED if board.gauge == 4 else TXTC)
     screen.blit(img, (SCRW - MARGIN - GPAD * 1, SCRH - MARGIN - GAUB))
+    # TODO add 1.5U and 8U buttons
+    # TODO show info when pointing to a button
 
 
 def draw_gametime_btn():
