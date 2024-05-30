@@ -51,15 +51,14 @@ def draw_gauge_btns():
     img = font.render("4U", True, TXTC_SELECTED if board.gauge == 4 else TXTC)
     screen.blit(img, (SCRW - MARGIN - GPAD * 1, SCRH - MARGIN - GAUB))
     # TODO add 1.5U and 8U buttons
-    # TODO show info when pointing to a button
 
 
 def draw_gametime_btn():
     global gametime, screen
     font = pg.font.Font(path.FONT['zh-cn'], GTIS)
-    img = font.render(f"{gametime.clock:.2f}", True, TXTC_SELECTED if gametime.paused else TXTC)
+    img = font.render(f"{gametime.clock:.2f}", True, TXTC_SELECTED if gametime.isPaused else TXTC)
     screen.blit(img, (SCRW - MARGIN - GPAD * TIME_LMUL, SCRH - MARGIN - GAUB))
-    img = font.render("s", True, TXTC_SELECTED if gametime.paused else TXTC)
+    img = font.render("s", True, TXTC_SELECTED if gametime.isPaused else TXTC)
     screen.blit(img, (SCRW - MARGIN - GPAD * TIME_RMUL, SCRH - MARGIN - GAUB))
 
 
@@ -81,6 +80,8 @@ def main():
     gametime = Gametime(0, False)
 
     while running:
+        # TODO show info when pointing to a button
+
         # Poll for events
         for event in pg.event.get():
             if event.type == pg.QUIT or event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
@@ -89,12 +90,12 @@ def main():
             if event.type == pg.KEYDOWN and event.key in board.ACTIVE_KEYS:
                 res = board.press(pg.key.get_pressed())
                 if res == FLIP_GAMETIME:
-                    gametime.paused = not gametime.paused
+                    gametime.isPaused = not gametime.isPaused
             if event.type == pg.MOUSEBUTTONDOWN:
                 x, y = pg.mouse.get_pos()
                 res = board.click(x, y)
                 if res == FLIP_GAMETIME:
-                    gametime.paused = not gametime.paused
+                    gametime.isPaused = not gametime.isPaused
 
         # Wipe away anything from last frame; then draw current frame
         draw_screen()
