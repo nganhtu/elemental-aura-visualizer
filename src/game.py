@@ -44,13 +44,10 @@ def draw_element_btns():
 def draw_gauge_btns():
     global board, screen
     font = pg.font.Font(path.FONT['zh-cn'], GAUS)
-    img = font.render("1U", True, TXTC_SELECTED if board.gauge == 1 else TXTC)
-    screen.blit(img, (SCRW - MARGIN - GPAD * 3, SCRH - MARGIN - GAUB))
-    img = font.render("2U", True, TXTC_SELECTED if board.gauge == 2 else TXTC)
-    screen.blit(img, (SCRW - MARGIN - GPAD * 2, SCRH - MARGIN - GAUB))
-    img = font.render("4U", True, TXTC_SELECTED if board.gauge == 4 else TXTC)
-    screen.blit(img, (SCRW - MARGIN - GPAD * 1, SCRH - MARGIN - GAUB))
-    # TODO add 1.5U and 8U buttons
+    for gauge in AVAILABLE_GAUGES:
+        img = font.render(f"{gauge}U", True, TXTC_SELECTED if board.gauge == gauge else TXTC)
+        screen.blit(img, (SCRW - MARGIN + GPAD * GAUGE_BTN_POSITION[gauge][0], \
+                          SCRH + (MARGIN + GAUB) * GAUGE_BTN_POSITION[gauge][1]))
 
 
 def draw_gametime_btn():
@@ -91,6 +88,8 @@ def main():
                 res = board.press(pg.key.get_pressed())
                 if res == FLIP_GAMETIME:
                     gametime.isPaused = not gametime.isPaused
+                elif res == APPLY_ELEMENT:
+                    pass # TODO apply element
             if event.type == pg.MOUSEBUTTONDOWN:
                 x, y = pg.mouse.get_pos()
                 res = board.click(x, y)

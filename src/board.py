@@ -16,17 +16,22 @@ class Board():
             if MARGIN + ELMS * element < x < MARGIN + ELMS * (element + 1) \
                 and SCRH - MARGIN - ELMS < y < SCRH - MARGIN:
                 self.element = element
-                ic("element clicked~", self.element, self.gauge) # TODO apply element
+                ic("element clicked~", self.element, self.gauge)
+                return APPLY_ELEMENT
 
         # check if gauge buttons being clicked
-        for i in range(3):
-            if SCRW - MARGIN - GPAD * (3 - i) < x < SCRW - MARGIN - GPAD * (3 - i - GBHR) \
-                and SCRH - MARGIN - GAUB < y < SCRH - MARGIN:
-                self.gauge = 2 ** i
+        for gauge in AVAILABLE_GAUGES:
+            if SCRW - MARGIN + GPAD * GAUGE_BTN_POSITION[gauge][0] < x < \
+               SCRW - MARGIN + GPAD * GAUGE_BTN_POSITION[gauge][0] + GPAD * GAUGE_BTN_SIZE_RATIO[gauge] \
+               and \
+               SCRH + (MARGIN + GAUB) * GAUGE_BTN_POSITION[gauge][1] < y < \
+               SCRH + (MARGIN + GAUB) * GAUGE_BTN_POSITION[gauge][1] + GAUB:
+                self.gauge = gauge
                 ic("gauge clicked~", self.gauge)
+                return SET_GAUGE
 
         # check if gametime button being clicked
-        if SCRW - MARGIN - GPAD * TIME_LMUL < x < SCRW - MARGIN - GPAD * (TIME_RMUL - 1 + GBHR) \
+        if SCRW - MARGIN - GPAD * TIME_LMUL < x < SCRW - MARGIN - GPAD * (TIME_RMUL - TIME_S_RATIO) \
             and SCRH - MARGIN - GAUB < y < SCRH - MARGIN:
             return FLIP_GAMETIME
 

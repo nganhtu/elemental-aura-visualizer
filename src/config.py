@@ -9,6 +9,7 @@ ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO = 0, 1, 2, 3, 4, 5, 6 # alphabet 
 ELEMENTS = (ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO)
 ELEMENTS_NUM = len(ELEMENTS)
 AURA_TAX = 0.8
+AVAILABLE_GAUGES = (1, 1.5, 2, 4, 8)
 
 
 # Assets
@@ -24,7 +25,9 @@ GAME_TIME_RESET_CAP = 100 # seconds
 
 # Return code
 OK = 100
-FLIP_GAMETIME = 101
+SET_GAUGE = 101
+APPLY_ELEMENT = 102
+FLIP_GAMETIME = 103
 
 
 # Pygame
@@ -38,8 +41,22 @@ GAUS = 60 # gauge button size
 GTIS = 60 # gametime size
 GAUB = (ELMS + GAUS) / 2 # gauge button border
 GPAD = 120 # gauge buttons padding
-GBHR = 0.75 # gauge button hitbox ratio
+GAUGE_BTN_POSITION = {
+    1: (-3, -1),
+    1.5: (-3, -2),
+    2: (-2, -1),
+    4: (-1, -1),
+    8: (-1, -2)
+} # (0, 0) is the bottom-most right-most corner of the screen
+GAUGE_BTN_SIZE_RATIO = {
+    1: 0.6,
+    1.5: 1.1,
+    2: 0.74,
+    4: 0.78,
+    8: 0.75
+} # ratio over gauge buttons padding
 TXTC = (255, 255, 255)  # text color
 TXTC_SELECTED = (247, 252, 88) # selected text color
 TIME_LMUL = 5.3 # left border multiplier of gauge buttons padding
 TIME_RMUL = 3.7 # right border multiplier of gauge buttons padding
+TIME_S_RATIO = 0.25 # ratio of the notation 's' over gauge buttons padding
