@@ -7,6 +7,7 @@ MS_IN_A_SEC = 1000
 # Genshin
 ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO = 0, 1, 2, 3, 4, 5, 6 # alphabet order
 ELEMENTS = (ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO)
+ELEMENT_NAMES = ('anemo', 'cryo', 'dendro', 'electro', 'geo', 'hydro', 'pyro')
 ELEMENTS_NUM = len(ELEMENTS)
 AURA_TAX = 0.8
 AVAILABLE_GAUGES = (1, 1.5, 2, 4, 8)

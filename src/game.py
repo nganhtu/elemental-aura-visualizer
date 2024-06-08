@@ -14,11 +14,12 @@ clock = None
 running = None
 dt = None
 element_pngs = None
+aura_pngs = None
 board = None
 
 
 def init():
-    global screen, clock, running, dt, element_pngs
+    global screen, clock, running, dt, element_pngs, aura_pngs
 
     # Pygame setup
     pg.init()
@@ -30,9 +31,12 @@ def init():
 
     # Load file names
     element_pngs = []
+    aura_pngs = []
     for file_name in os.listdir(path.ELEMENTS):
-        element_pngs.append(pg.image.load(path.ELEMENTS + file_name))
-        # FIXME load by each element's name
+        img = pg.image.load(path.ELEMENTS + file_name)
+        aura_pngs.append(img)
+        if f"{file_name[:-len('.png')]}" in ELEMENT_NAMES:
+            element_pngs.append(img)
 
 
 def draw_element_btns():
