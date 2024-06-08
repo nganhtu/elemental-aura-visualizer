@@ -32,6 +32,7 @@ def init():
     element_pngs = []
     for file_name in os.listdir(path.ELEMENTS):
         element_pngs.append(pg.image.load(path.ELEMENTS + file_name))
+        # FIXME load by each element's name
 
 
 def draw_element_btns():
@@ -77,7 +78,7 @@ def main():
     gametime = Gametime(0, False)
 
     while running:
-        # TODO show info when pointing to a button
+        # TODO glow up element icon when pointing in
 
         # Poll for events
         for event in pg.event.get():
@@ -88,13 +89,13 @@ def main():
                 res = board.press(pg.key.get_pressed())
                 if res == FLIP_GAMETIME:
                     gametime.isPaused = not gametime.isPaused
-                elif res == APPLY_ELEMENT:
-                    pass # TODO apply element
             if event.type == pg.MOUSEBUTTONDOWN:
                 x, y = pg.mouse.get_pos()
                 res = board.click(x, y)
                 if res == FLIP_GAMETIME:
                     gametime.isPaused = not gametime.isPaused
+                elif res == APPLY_ELEMENT:
+                    pass # TODO apply element
 
         # Wipe away anything from last frame; then draw current frame
         draw_screen()
@@ -112,5 +113,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# TODO Glow up the icon when selecting it
