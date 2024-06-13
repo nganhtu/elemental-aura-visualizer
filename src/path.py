@@ -16,7 +16,7 @@ FONT = {lang: f"{FONTS}{lang}.ttf" for lang in OPT_FONTS}
 
 IMAGES = f"{ASSETS}images/"
 
-ELEMENTS = f"{IMAGES}elements/"
+AURAS = f"{IMAGES}auras/"
 FAVICON = f"{IMAGES}favicon.png"
 
 

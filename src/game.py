@@ -32,8 +32,8 @@ def init():
     # Load file names
     element_pngs = []
     aura_pngs = []
-    for file_name in os.listdir(path.ELEMENTS):
-        img = pg.image.load(path.ELEMENTS + file_name)
+    for file_name in os.listdir(path.AURAS):
+        img = pg.image.load(path.AURAS + file_name)
         aura_pngs.append(img)
         if f"{file_name[:-len('.png')]}" in ELEMENT_NAMES:
             element_pngs.append(img)
@@ -82,8 +82,6 @@ def main():
     gametime = Gametime(0, False)
 
     while running:
-        # TODO glow up element icon when pointing in
-
         # Poll for events
         for event in pg.event.get():
             if event.type == pg.QUIT or event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
