@@ -14,6 +14,7 @@ screen = None
 clock = None
 running = None
 dt = None
+favicon = None
 element_pngs = None
 aura_pngs = None
 board = None
@@ -22,7 +23,7 @@ dummy = None
 
 
 def init():
-    global screen, clock, running, dt, element_pngs, aura_pngs
+    global screen, clock, running, dt, favicon, element_pngs, aura_pngs
 
     # Pygame setup
     pg.init()
@@ -32,7 +33,9 @@ def init():
     running = True
     dt = 0
 
-    # Load file names
+    # Load pngs
+    favicon = pg.image.load(path.FAVICON)
+    pg.display.set_icon(favicon)
     element_pngs = []
     aura_pngs = []
     for file_name in os.listdir(path.AURAS):
