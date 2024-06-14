@@ -6,6 +6,7 @@ from config import *
 import path
 from board import Board
 from gametime import Gametime
+from dummy import Dummy
 
 
 # Global variables
@@ -16,6 +17,8 @@ dt = None
 element_pngs = None
 aura_pngs = None
 board = None
+gametime = None
+dummy = None
 
 
 def init():
@@ -73,13 +76,14 @@ def draw_screen():
 
 
 def main():
-    global running, dt, board, gametime
+    global running, dt, board, gametime, dummy
 
     init()
 
     # Prepare game objects
     board = Board()
     gametime = Gametime(0, False)
+    dummy = Dummy()
 
     while running:
         # Poll for events
@@ -97,7 +101,10 @@ def main():
                 if res == FLIP_GAMETIME:
                     gametime.isPaused = not gametime.isPaused
                 elif res == APPLY_ELEMENT:
-                    pass # TODO apply element
+                    if board.gauge is None:
+                        ic("Gauge is not choosen yet~") # TODO warning to player
+                    else:
+                        dummy.affectedBy(board.element, board.gauge)
 
         # Wipe away anything from last frame; then draw current frame
         draw_screen()
