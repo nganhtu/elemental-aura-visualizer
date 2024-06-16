@@ -35,7 +35,7 @@ class Aura:
 
 
 class Freeze_aura():
-    def __init(self, gauge, starting_decay_speed):
+    def __init__(self, gauge, starting_decay_speed):
         self.aura = FREEZE
         self.gauge = gauge
         self.decay_rate = 1 / starting_decay_speed
