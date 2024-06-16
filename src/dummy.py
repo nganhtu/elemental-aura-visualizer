@@ -11,11 +11,11 @@ class Dummy():
         self.freeze_aura = None
         self.freeze_aura_decay_speed = FREEZE_AURA_STARTING_DECAY_SPEED
 
-    def isFrozen(self):
+    def is_frozen(self):
         return self.freeze_aura is not None
 
     def update_freeze_decay_speed(self, dt):
-        if self.isFrozen():
+        if self.is_frozen():
             self.freeze_aura_decay_speed = self.freeze_aura.decay_speed
         else:
             if self.freeze_aura_decay_speed > FREEZE_AURA_STARTING_DECAY_SPEED:
@@ -23,5 +23,5 @@ class Dummy():
             if self.freeze_aura_decay_speed < FREEZE_AURA_STARTING_DECAY_SPEED:
                 self.freeze_aura_decay_speed = FREEZE_AURA_STARTING_DECAY_SPEED
 
-    def affectedBy(self, element, gauge):
+    def affected_by(self, element, gauge):
         ic('dummy is affected by~', element, gauge)

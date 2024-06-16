@@ -108,7 +108,7 @@ def main():
                     if board.gauge is None:
                         ic("Gauge is not choosen yet~") # TODO warning to player
                     else:
-                        dummy.affectedBy(board.element, board.gauge)
+                        dummy.affected_by(board.element, board.gauge)
 
         # Wipe away anything from last frame; then draw current frame
         draw_screen()
