@@ -21,8 +21,8 @@ FREEZE_AURA_RESTORE_ACCELERATION_RATE = -0.2 # U/s^2
 
 
 class Aura:
-    def __init__(self, aura, gauge, decay_rate):
-        self.aura = aura
+    def __init__(self, type, gauge, decay_rate):
+        self.type = type
         self.gauge = gauge
         self.decay_rate = decay_rate
         self.decay_speed = 1 / self.decay_rate
@@ -36,7 +36,7 @@ class Aura:
 
 class Freeze_aura():
     def __init__(self, gauge, starting_decay_speed):
-        self.aura = FREEZE
+        self.type = FREEZE
         self.gauge = gauge
         self.decay_rate = 1 / starting_decay_speed
         self.decay_speed = starting_decay_speed
