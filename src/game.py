@@ -36,20 +36,20 @@ def init():
     # Load pngs
     favicon = pg.image.load(path.FAVICON)
     pg.display.set_icon(favicon)
-    element_pngs = []
-    aura_pngs = []
-    for file_name in os.listdir(path.AURAS):
-        img = pg.image.load(path.AURAS + file_name)
-        aura_pngs.append(img)
-        if f"{file_name[:-len('.png')]}" in ELEMENT_NAMES:
-            element_pngs.append(img)
+    element_pngs = {}
+    aura_pngs = {}
+    for aura in AURA_NAMES:
+        img = pg.image.load(f"{path.AURAS + AURA_NAMES[aura]}.png")
+        aura_pngs[aura] = img
+        if aura in ELEMENTS:
+            element_pngs[aura] = img
 
 
 def draw_element_btns():
     global element_pngs
-    for i in range(len(element_pngs)):
-        screen.blit(pg.transform.scale(element_pngs[i], (ELMS, ELMS)), \
-                    (MARGIN + ELMS * i, SCRH - MARGIN - ELMS))
+    for element in ELEMENTS:
+        screen.blit(pg.transform.scale(element_pngs[element], (ELMS, ELMS)), \
+                    (MARGIN + ELMS * element, SCRH - MARGIN - ELMS))
 
 
 def draw_gauge_btns():

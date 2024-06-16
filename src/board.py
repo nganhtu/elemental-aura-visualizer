@@ -12,7 +12,7 @@ class Board():
 
     def click(self, x, y):
         # check if element buttons being clicked
-        for element in range(ELEMENTS_NUM):
+        for element in range(len(ELEMENTS)):
             if MARGIN + ELMS * element < x < MARGIN + ELMS * (element + 1) \
                 and SCRH - MARGIN - ELMS < y < SCRH - MARGIN:
                 self.element = element
