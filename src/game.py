@@ -3,6 +3,7 @@ from icecream import ic
 import pygame as pg
 import os
 from config import *
+from genshin import *
 import path
 from board import Board
 from gametime import Gametime

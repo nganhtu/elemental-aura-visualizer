@@ -1,7 +1,8 @@
 from icecream import ic
 
-from config import *
 import pygame as pg
+from config import *
+from genshin import *
 
 
 class Board():
