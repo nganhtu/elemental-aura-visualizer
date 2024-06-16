@@ -14,7 +14,7 @@ class Dummy():
     def isFrozen(self):
         return self.freeze_aura is not None
 
-    def update_freeze_params(self, dt):
+    def update_freeze_decay_speed(self, dt):
         if self.isFrozen():
             self.freeze_aura_decay_speed = self.freeze_aura.decay_speed
         else:
