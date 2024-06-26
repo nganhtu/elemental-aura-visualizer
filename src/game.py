@@ -1,8 +1,6 @@
 from icecream import ic
 
 import pygame as pg
-import os
-from config import *
 from genshin import *
 import path
 from board import Board
@@ -49,7 +47,7 @@ def init():
 def draw_element_btns():
     global element_pngs
     for element in ELEMENTS:
-        screen.blit(pg.transform.scale(element_pngs[element], (ELMS, ELMS)), \
+        screen.blit(pg.transform.scale(element_pngs[element], (ELMS, ELMS)),
                     (MARGIN + ELMS * element, SCRH - MARGIN - ELMS))
 
 
@@ -58,7 +56,7 @@ def draw_gauge_btns():
     font = pg.font.Font(path.FONT['zh-cn'], GAUS)
     for gauge in AVAILABLE_GAUGES:
         img = font.render(f"{gauge}U", True, TXTC_SELECTED if board.gauge == gauge else TXTC)
-        screen.blit(img, (SCRW - MARGIN + GPAD * GAUGE_BTN_POSITION[gauge][0], \
+        screen.blit(img, (SCRW - MARGIN + GPAD * GAUGE_BTN_POSITION[gauge][0],
                           SCRH + (MARGIN + GAUB) * GAUGE_BTN_POSITION[gauge][1]))
 
 
@@ -95,7 +93,7 @@ def main():
             if event.type == pg.QUIT or event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
                 running = False
                 ic("Game quit on demand~")
-            if event.type == pg.KEYDOWN and event.key in board.ACTIVE_KEYS:
+            if event.type == pg.KEYDOWN and event.key in Board.ACTIVE_KEYS:
                 res = board.press(pg.key.get_pressed())
                 if res == FLIP_GAMETIME:
                     gametime.isPaused = not gametime.isPaused
@@ -106,7 +104,7 @@ def main():
                     gametime.isPaused = not gametime.isPaused
                 elif res == APPLY_ELEMENT:
                     if board.gauge is None:
-                        ic("Gauge is not choosen yet~") # TODO warning to player
+                        ic("Gauge is not chosen yet~")  # TODO warning to player
                     else:
                         dummy.affected_by(board.element, board.gauge)
 
@@ -119,7 +117,11 @@ def main():
         pg.display.flip()
 
         dt = clock.tick(FPS) / MS_IN_A_SEC
+
+        # Update things
         gametime.update(dt)
+        if not gametime.isPaused:
+            dummy.update(dt)
 
     pg.quit()
 
