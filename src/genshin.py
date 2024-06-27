@@ -26,7 +26,7 @@ def decay_rate(gauge):
         return (2.5 * gauge + 7) / (AURA_TAX * gauge)
     else:
         ic('gauge is not available!', gauge)
-        return -1
+        return float('inf')
 
 
 class Element:
