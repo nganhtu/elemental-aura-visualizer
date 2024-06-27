@@ -26,7 +26,8 @@ ELEMENT_NAMES = {key: AURA_NAMES[key] for key in AURA_NAMES if key in ELEMENTS}
 # Assets
 OPT_FONTS = ("ja-jp", "zh-cn")
 OPT_LOCALIZATIONS = ("CHS", "CHT", "DE", "EN", "ES", "FR", "ID", "IT", "JP", "KR", "PT", "RU", "TH", "TR", "VI")
-OPT_SOUNDS = ("bark")
+OPT_SOUNDS = ("bark.wav",)
+OPT_AUDIO = ("close_win.mp3", "open_win.mp3", "switch_task.mp3", "switch_type.mp3")
 
 
 # App

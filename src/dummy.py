@@ -23,15 +23,6 @@ class Dummy:
             if self.freeze_aura_decay_speed < FREEZE_AURA_STARTING_DECAY_SPEED:
                 self.freeze_aura_decay_speed = FREEZE_AURA_STARTING_DECAY_SPEED
 
-    def affected_by(self, element, gauge):
-        ic('dummy is affected by~', element, gauge)
-        if len(self.auras) == 0 and self.freeze_aura is None:
-            new_aura = Aura(element, AURA_TAX * gauge, decay_rate(gauge))
-            self.auras.append(new_aura)
-            ic('dummy has a new aura~')
-        else:
-            ic('dummy already contains auras~')
-
     def update(self, dt):
         for aura in self.auras:
             aura.update(dt)
@@ -44,3 +35,12 @@ class Dummy:
                 ic('freeze aura will be removed~')
                 self.freeze_aura = None
         self.update_freeze_decay_speed(dt)
+
+    def affected_by(self, element, gauge):
+        ic('dummy is affected by~', element, gauge)
+        if len(self.auras) == 0 and self.freeze_aura is None:
+            new_aura = Aura(element, AURA_TAX * gauge, decay_rate(gauge))
+            self.auras.append(new_aura)
+            ic('dummy has a new aura~')
+        else:
+            ic('dummy already contains auras~')

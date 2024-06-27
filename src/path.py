@@ -10,6 +10,11 @@ ROOT = f"{os.path.dirname(os.path.abspath(__file__))}/../"
 ASSETS = f"{ROOT}assets/"
 
 
+AUDIOS = f"{ASSETS}audio/"
+
+AUDIO = {audio: f"{AUDIOS}{audio}" for audio in OPT_AUDIO}
+
+
 FONTS = f"{ASSETS}fonts/"
 
 FONT = {lang: f"{FONTS}{lang}.ttf" for lang in OPT_FONTS}
@@ -27,4 +32,4 @@ LOCALIZATION = {lang: f"{LOCALIZATIONS}TextMap{lang}.json" for lang in OPT_LOCAL
 
 SOUNDS = f"{ASSETS}sounds/"
 
-SOUND = {sound: f"{SOUNDS}{sound}.wav" for sound in OPT_SOUNDS}
+SOUND = {sound: f"{SOUNDS}{sound}" for sound in OPT_SOUNDS}
