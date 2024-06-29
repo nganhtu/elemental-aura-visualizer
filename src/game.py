@@ -1,7 +1,9 @@
 from icecream import ic
 
 import pygame as pg
-from genshin import *
+import math
+
+from config import *
 import path
 from board import Board
 from gametime import Gametime
@@ -69,12 +71,32 @@ def draw_gametime_btn():
     screen.blit(img, (SCRW - MARGIN - GPAD * TIME_RMUL, SCRH - MARGIN - GAUB))
 
 
+def draw_aura_bars():
+    global dummy
+    # TODO
+
+
+def draw_division_lines():
+    global screen
+    for i in range(1, MAX_COEXIST_AURAS_AVAILABLE + 1):
+        for x in range(1, math.floor(MAX_AURA_GAUGE_AVAILABLE) + 1):
+            pg.draw.rect(screen, RULER_COLOR, pg.Rect(
+                x * RULER_W / MAX_AURA_GAUGE_AVAILABLE, RULER_PADDING_H * i,
+                RULER_BLINE_W, RULER_BLINE_H))
+        for x in range(1, math.ceil(MAX_AURA_GAUGE_AVAILABLE * RULER_LINE_RATIO) + 1):
+            pg.draw.rect(screen, RULER_COLOR, pg.Rect(
+                x * RULER_W / MAX_AURA_GAUGE_AVAILABLE / RULER_LINE_RATIO, RULER_PADDING_H * i,
+                RULER_SLINE_W, RULER_SLINE_H))
+
+
 def draw_screen():
     global screen
     screen.fill(BGRC)
     draw_element_btns()
     draw_gauge_btns()
     draw_gametime_btn()
+    draw_aura_bars()
+    draw_division_lines()
 
 
 def main():

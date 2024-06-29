@@ -1,10 +1,27 @@
+# Every magic numbers in this file were discovered and standardized
+# by most of Genshin Impact theorycrafting communities and players.
+
+# References:
+# https://library.keqingmains.com/combat-mechanics/elemental-effects/elemental-gauge-theory
+# https://library.keqingmains.com/combat-mechanics/elemental-effects/transformative-reactions
+# https://bbs.nga.cn/read.php?tid=24400590
+# https://bbs.nga.cn/read.php?tid=33231790
+# https://nga.178.com/read.php?tid=33235924&rand=343
+
+
 from icecream import ic
 
-from config import *
+
+ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO = 0, 1, 2, 3, 4, 5, 6  # do not change
+BURNING, FREEZE, QUICKEN = 10, 11, 12
+ELEMENTS = (ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO)
+AURAS = (ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO, BURNING, FREEZE, QUICKEN)
 
 
 AURA_TAX = 0.8
 AVAILABLE_GAUGES = (1, 1.5, 2, 4, 8)
+MAX_AURA_GAUGE_AVAILABLE = 6.4
+MAX_COEXIST_AURAS_AVAILABLE = 3
 SRP = {
     PYRO: (ELECTRO, ANEMO, HYDRO, FREEZE, CRYO, QUICKEN, DENDRO),
     HYDRO: (PYRO, BURNING, ANEMO, CRYO, QUICKEN, DENDRO, ELECTRO),
