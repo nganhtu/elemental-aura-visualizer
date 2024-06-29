@@ -12,7 +12,6 @@
 from icecream import ic
 
 
-
 ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO = 0, 1, 2, 3, 4, 5, 6  # do not change
 BURNING, FREEZE, QUICKEN = 10, 11, 12  # keep order when change
 ELEMENTS = (ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO)
@@ -20,8 +19,10 @@ AURAS = (ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO, BURNING, FREEZE, QUICKE
 
 REACT = 100  # "bigger number" element's multiplicator
 
+
 def react(aura1, aura2):
     return aura1 * REACT + aura2 if aura1 > aura2 else aura2 * REACT + aura1
+
 
 SPREAD = react(QUICKEN, DENDRO)
 AGGRAVATE = react(QUICKEN, ELECTRO)
