@@ -35,11 +35,14 @@ class Dummy:
                 self.freeze_aura = None
         self.update_freeze_decay_speed(dt)
 
-    def affected_by(self, element, gauge):
-        ic('dummy is affected by~', element, gauge)
-        if len(self.auras) == 0 and self.freeze_aura is None:
-            new_aura = Aura(element, AURA_TAX * gauge, decay_rate(gauge))
+    def affected_by(self, element):
+        for aura in SRP[element.type]:
+            if aura in self.auras:
+                # react(element, aura)
+                if element.gauge <= 0:
+                    break
+            # TODO react with freeze aura
+            # TODO extend same type aura that already exist
+        if element.gauge > 0:
+            new_aura = Aura(element.type, AURA_TAX * element.gauge, decay_rate(element.gauge))
             self.auras.append(new_aura)
-            ic('dummy has a new aura~')
-        else:
-            ic('dummy already contains auras~')

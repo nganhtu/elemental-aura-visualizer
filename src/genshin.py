@@ -17,47 +17,6 @@ BURNING, FREEZE, QUICKEN = 10, 11, 12  # keep order when change
 ELEMENTS = (ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO)
 AURAS = (ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO, BURNING, FREEZE, QUICKEN)
 
-REACT = 100  # "bigger number" element's multiplicator
-
-
-def react(aura1, aura2):
-    return aura1 * REACT + aura2 if aura1 > aura2 else aura2 * REACT + aura1
-
-
-SPREAD = react(QUICKEN, DENDRO)
-AGGRAVATE = react(QUICKEN, ELECTRO)
-Q_BLOOM = react(QUICKEN, HYDRO)
-Q_BURNING = react(QUICKEN, PYRO)
-F_SWIRL = react(FREEZE, ANEMO)
-F_SUPERCONDUCT = react(FREEZE, ELECTRO)
-SHATTER = react(FREEZE, GEO)
-F_MELT = react(FREEZE, PYRO)
-B_SWIRL = react(BURNING, ANEMO)
-B_OVERLOADED = react(BURNING, ELECTRO)
-B_CRYSTALLIZE = react(BURNING, GEO)
-B_VAPORIZE = react(BURNING, HYDRO)
-P_SWIRL = react(PYRO, ANEMO)
-MELT = react(PYRO, CRYO)
-REACTION_BURNING = react(PYRO, DENDRO)
-OVERLOADED = react(PYRO, ELECTRO)
-P_CRYSTALLIZE = react(PYRO, GEO)
-VAPORIZE = react(PYRO, HYDRO)
-H_SWIRL = react(HYDRO, ANEMO)
-REACTION_FROZEN = react(HYDRO, CRYO)
-BLOOM = react(HYDRO, DENDRO)
-ELECTRO_CHARGED = react(HYDRO, ELECTRO)
-H_CRYSTALLIZE = react(HYDRO, GEO)
-C_CRYSTALLIZE = react(GEO, CRYO)
-E_CRYSTALLIZE = react(GEO, ELECTRO)
-E_SWIRL = react(ELECTRO, ANEMO)
-SUPERCONDUCT = react(ELECTRO, CRYO)
-REACTION_QUICKEN = react(ELECTRO, DENDRO)
-C_SWIRL = react(CRYO, ANEMO)
-ELEMENTAL_REACTIONS = (SPREAD, AGGRAVATE, Q_BLOOM, Q_BURNING, F_SWIRL, F_SUPERCONDUCT, SHATTER,
-                       F_MELT, B_SWIRL, B_OVERLOADED, B_CRYSTALLIZE, B_VAPORIZE, P_SWIRL, MELT,
-                       REACTION_BURNING, OVERLOADED, P_CRYSTALLIZE, VAPORIZE, C_CRYSTALLIZE,
-                       E_CRYSTALLIZE, E_SWIRL, SUPERCONDUCT, REACTION_QUICKEN, C_SWIRL)
-
 
 AURA_TAX = 0.8
 AVAILABLE_GAUGES = (1, 1.5, 2, 4, 8)
@@ -119,3 +78,45 @@ class FreezeAura(Element):
             self.decay_rate = 1 / self.decay_speed
         if self.gauge < 0:
             self.gauge = 0
+
+
+REACT_MULT = 100  # "bigger number" element's multiplicator
+
+
+def create_react_notation(aura1, aura2):
+    return aura1 * REACT_MULT + aura2 if aura1 > aura2 else aura2 * REACT_MULT + aura1
+
+
+SPREAD = create_react_notation(QUICKEN, DENDRO)
+AGGRAVATE = create_react_notation(QUICKEN, ELECTRO)
+Q_BLOOM = create_react_notation(QUICKEN, HYDRO)
+Q_BURNING = create_react_notation(QUICKEN, PYRO)
+F_SWIRL = create_react_notation(FREEZE, ANEMO)
+F_SUPERCONDUCT = create_react_notation(FREEZE, ELECTRO)
+SHATTER = create_react_notation(FREEZE, GEO)
+F_MELT = create_react_notation(FREEZE, PYRO)
+B_SWIRL = create_react_notation(BURNING, ANEMO)
+B_OVERLOADED = create_react_notation(BURNING, ELECTRO)
+B_CRYSTALLIZE = create_react_notation(BURNING, GEO)
+B_VAPORIZE = create_react_notation(BURNING, HYDRO)
+P_SWIRL = create_react_notation(PYRO, ANEMO)
+MELT = create_react_notation(PYRO, CRYO)
+REACTION_BURNING = create_react_notation(PYRO, DENDRO)
+OVERLOADED = create_react_notation(PYRO, ELECTRO)
+P_CRYSTALLIZE = create_react_notation(PYRO, GEO)
+VAPORIZE = create_react_notation(PYRO, HYDRO)
+H_SWIRL = create_react_notation(HYDRO, ANEMO)
+REACTION_FROZEN = create_react_notation(HYDRO, CRYO)
+BLOOM = create_react_notation(HYDRO, DENDRO)
+ELECTRO_CHARGED = create_react_notation(HYDRO, ELECTRO)
+H_CRYSTALLIZE = create_react_notation(HYDRO, GEO)
+C_CRYSTALLIZE = create_react_notation(GEO, CRYO)
+E_CRYSTALLIZE = create_react_notation(GEO, ELECTRO)
+E_SWIRL = create_react_notation(ELECTRO, ANEMO)
+SUPERCONDUCT = create_react_notation(ELECTRO, CRYO)
+REACTION_QUICKEN = create_react_notation(ELECTRO, DENDRO)
+C_SWIRL = create_react_notation(CRYO, ANEMO)
+ELEMENTAL_REACTIONS = (SPREAD, AGGRAVATE, Q_BLOOM, Q_BURNING, F_SWIRL, F_SUPERCONDUCT, SHATTER,
+                       F_MELT, B_SWIRL, B_OVERLOADED, B_CRYSTALLIZE, B_VAPORIZE, P_SWIRL, MELT,
+                       REACTION_BURNING, OVERLOADED, P_CRYSTALLIZE, VAPORIZE, C_CRYSTALLIZE,
+                       E_CRYSTALLIZE, E_SWIRL, SUPERCONDUCT, REACTION_QUICKEN, C_SWIRL)

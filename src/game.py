@@ -156,7 +156,7 @@ def main():
                         ic("Gauge is not chosen yet~")  # TODO warning to player
                     else:
                         play_audio['switch_task.mp3']()
-                        dummy.affected_by(board.element, board.gauge)
+                        dummy.affected_by(Element(board.element, board.gauge))
 
         # Wipe away anything from last frame; then draw current frame
         draw_screen()
