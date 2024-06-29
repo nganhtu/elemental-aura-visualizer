@@ -28,7 +28,7 @@ def init():
 
     # Pygame setup
     pg.init()
-    screen = pg.display.set_mode((SCRW, SCRH), pg.SCALED)
+    screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.SCALED)
     pg.display.set_caption(CAPTION)
     clock = pg.time.Clock()
     running = True
@@ -49,26 +49,28 @@ def init():
 def draw_element_btns():
     global element_pngs
     for element in ELEMENTS:
-        screen.blit(pg.transform.scale(element_pngs[element], (ELMS, ELMS)),
-                    (MARGIN + ELMS * element, SCRH - MARGIN - ELMS))
+        screen.blit(pg.transform.scale(element_pngs[element], (ELEMENT_ICON_SIZE, ELEMENT_ICON_SIZE)),
+                    (MARGIN + ELEMENT_ICON_SIZE * element, SCREEN_HEIGHT - MARGIN - ELEMENT_ICON_SIZE))
 
 
 def draw_gauge_btns():
     global board, screen
-    font = pg.font.Font(path.FONT['zh-cn'], GAUS)
+    font = pg.font.Font(path.FONT['zh-cn'], GAUGE_BTN_SIZE)
     for gauge in AVAILABLE_GAUGES:
-        text = font.render(f"{gauge}U", True, TXTC_SELECTED if board.gauge == gauge else TXTC)
-        screen.blit(text, (SCRW - MARGIN + GPAD * GAUGE_BTN_POSITION[gauge][0],
-                          SCRH + (MARGIN + GAUB) * GAUGE_BTN_POSITION[gauge][1]))
+        text = font.render(f"{gauge}U", True, SELECTED_TEXT_COLOR if board.gauge == gauge else TEXT_COLOR)
+        screen.blit(text, (SCREEN_WIDTH - MARGIN + GAUGE_BTN_PADDING * GAUGE_BTN_POSITION[gauge][0],
+                           SCREEN_HEIGHT + (MARGIN + GAUGE_BTN_BORDER) * GAUGE_BTN_POSITION[gauge][1]))
 
 
 def draw_gametime_btn():
     global gametime, screen
-    font = pg.font.Font(path.FONT['zh-cn'], GTIS)
-    text = font.render(f"{gametime.clock:.2f}", True, TXTC_SELECTED if gametime.isPaused else TXTC)
-    screen.blit(text, (SCRW - MARGIN - GPAD * TIME_LMUL, SCRH - MARGIN - GAUB))
-    text = font.render("s", True, TXTC_SELECTED if gametime.isPaused else TXTC)
-    screen.blit(text, (SCRW - MARGIN - GPAD * TIME_RMUL, SCRH - MARGIN - GAUB))
+    font = pg.font.Font(path.FONT['zh-cn'], GAMETIME_BTN_SIZE)
+    text = font.render(f"{gametime.clock:.2f}", True, SELECTED_TEXT_COLOR if gametime.isPaused else TEXT_COLOR)
+    screen.blit(text, (SCREEN_WIDTH - MARGIN - GAUGE_BTN_PADDING * TIME_L_MULT,
+                       SCREEN_HEIGHT - MARGIN - GAUGE_BTN_BORDER))
+    text = font.render("s", True, SELECTED_TEXT_COLOR if gametime.isPaused else TEXT_COLOR)
+    screen.blit(text, (SCREEN_WIDTH - MARGIN - GAUGE_BTN_PADDING * TIME_R_MULT,
+                       SCREEN_HEIGHT - MARGIN - GAUGE_BTN_BORDER))
 
 
 def draw_aura_bars_and_descriptions():
@@ -82,7 +84,7 @@ def draw_aura_bars_and_descriptions():
             aura.gauge * RULER_W / MAX_AURA_GAUGE_AVAILABLE, RULER_H))
         # draw aura descriptions
         font = pg.font.Font(path.FONT['zh-cn'], 30)
-        text = font.render(f"{AURA_NAMES[aura.type]} aura, decay rate: {aura.decay_rate:.2f}s, current gauge: {aura.gauge:.2f}U", True, TXTC)
+        text = font.render(f"{AURA_NAMES[aura.type]} aura, decay rate: {aura.decay_rate:.2f}s, current gauge: {aura.gauge:.2f}U", True, TEXT_COLOR)
         screen.blit(text, (MARGIN, RULER_PADDING_H * (current_ruler - 0.3)))
 
 
@@ -92,16 +94,16 @@ def draw_division_lines():
         for x in range(1, math.floor(MAX_AURA_GAUGE_AVAILABLE) + 1):
             pg.draw.rect(screen, RULER_COLOR, pg.Rect(
                 x * RULER_W / MAX_AURA_GAUGE_AVAILABLE, RULER_PADDING_H * i,
-                RULER_BLINE_W, RULER_BLINE_H))
+                RULER_BIG_LINE_W, RULER_BIG_LINE_H))
         for x in range(1, math.ceil(MAX_AURA_GAUGE_AVAILABLE * RULER_LINE_RATIO) + 1):
             pg.draw.rect(screen, RULER_COLOR, pg.Rect(
                 x * RULER_W / MAX_AURA_GAUGE_AVAILABLE / RULER_LINE_RATIO, RULER_PADDING_H * i,
-                RULER_SLINE_W, RULER_SLINE_H))
+                RULER_SMALL_LINE_W, RULER_SMALL_LINE_H))
 
 
 def draw_screen():
     global screen
-    screen.fill(BGRC)
+    screen.fill(BACKGROUND_COLOR)
     draw_element_btns()
     draw_gauge_btns()
     draw_gametime_btn()

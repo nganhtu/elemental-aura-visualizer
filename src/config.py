@@ -42,16 +42,16 @@ FLIP_GAMETIME = 103
 
 
 # Pygame
-SCRW = 1280   # screen width
-SCRH = 720   # screen height
-FPS = 60   # frames per second
-BGRC = (37, 37, 37)   # background color
-ELMS = 80   # element icon size
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+FPS = 60
+BACKGROUND_COLOR = (37, 37, 37)
+ELEMENT_ICON_SIZE = 80
 MARGIN = 20  # margin around screen
-GAUS = 60  # gauge button size
-GTIS = 60  # gametime size
-GAUB = (ELMS + GAUS) / 2  # gauge button border
-GPAD = 120  # gauge buttons padding
+GAMETIME_BTN_SIZE = 60
+GAUGE_BTN_SIZE = 60
+GAUGE_BTN_BORDER = (ELEMENT_ICON_SIZE + GAUGE_BTN_SIZE) / 2
+GAUGE_BTN_PADDING = 120
 GAUGE_BTN_POSITION = {
     1: (-3, -1),
     1.5: (-3, -2),
@@ -66,20 +66,20 @@ GAUGE_BTN_SIZE_RATIO = {
     4: 0.78,
     8: 0.75
 }  # ratio over gauge buttons padding
-TXTC = (255, 255, 255)   # text color
-TXTC_SELECTED = (247, 252, 88)  # selected text color
-TIME_LMUL = 5.3  # left border multiplier of gauge buttons padding
-TIME_RMUL = 3.7  # right border multiplier of gauge buttons padding
+TEXT_COLOR = (255, 255, 255)
+SELECTED_TEXT_COLOR = (247, 252, 88)
+TIME_L_MULT = 5.3  # left border multiplier of gauge buttons padding
+TIME_R_MULT = 3.7  # right border multiplier of gauge buttons padding
 TIME_S_RATIO = 0.25  # ratio of the notation 's' over gauge buttons padding
-RULER_COLOR = BGRC
+RULER_COLOR = BACKGROUND_COLOR
 RULER_LINE_RATIO = 10
-RULER_W = SCRW * 0.7
+RULER_W = SCREEN_WIDTH * 0.7
 RULER_H = 30
-RULER_BLINE_W = 2
-RULER_BLINE_H = 30
-RULER_SLINE_W = 1
-RULER_SLINE_H = 20
-RULER_AREA_H = 0.9 * (SCRH + (MARGIN + GAUB) * GAUGE_BTN_POSITION[8][1])
+RULER_BIG_LINE_W = 2
+RULER_BIG_LINE_H = 30
+RULER_SMALL_LINE_W = 1
+RULER_SMALL_LINE_H = 20
+RULER_AREA_H = 0.9 * (SCREEN_HEIGHT + (MARGIN + GAUGE_BTN_BORDER) * GAUGE_BTN_POSITION[8][1])
 RULER_PADDING_H = RULER_AREA_H / MAX_COEXIST_AURAS_AVAILABLE
 AURA_COLORS = {
     ANEMO: (115, 248, 206),
