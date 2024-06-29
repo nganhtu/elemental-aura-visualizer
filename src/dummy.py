@@ -1,7 +1,6 @@
 from icecream import ic
 
 from config import *
-from genshin import *
 
 
 class Dummy:

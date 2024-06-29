@@ -8,16 +8,16 @@ MILLISECOND_TO_SECOND = 0.001
 
 # Genshin
 AURA_NAMES = {
-    ANEMO: 'anemo',
-    BURNING: 'burning',
-    CRYO: 'cryo',
-    DENDRO: 'dendro',
-    ELECTRO: 'electro',
-    FREEZE: 'freeze',
-    GEO: 'geo',
-    HYDRO: 'hydro',
-    PYRO: 'pyro',
-    QUICKEN: 'quicken'
+    ANEMO: 'Anemo',
+    BURNING: 'Burning',
+    CRYO: 'Cryo',
+    DENDRO: 'Dendro',
+    ELECTRO: 'Electro',
+    FREEZE: 'Freeze',
+    GEO: 'Geo',
+    HYDRO: 'Hydro',
+    PYRO: 'Pyro',
+    QUICKEN: 'Quicken'
 }
 ELEMENT_NAMES = {key: AURA_NAMES[key] for key in AURA_NAMES if key in ELEMENTS}
 
@@ -71,7 +71,7 @@ TXTC_SELECTED = (247, 252, 88)  # selected text color
 TIME_LMUL = 5.3  # left border multiplier of gauge buttons padding
 TIME_RMUL = 3.7  # right border multiplier of gauge buttons padding
 TIME_S_RATIO = 0.25  # ratio of the notation 's' over gauge buttons padding
-RULER_COLOR = (127, 127, 127)
+RULER_COLOR = BGRC
 RULER_LINE_RATIO = 10
 RULER_W = SCRW * 0.7
 RULER_H = 30
@@ -81,7 +81,7 @@ RULER_SLINE_W = 1
 RULER_SLINE_H = 20
 RULER_AREA_H = 0.9 * (SCRH + (MARGIN + GAUB) * GAUGE_BTN_POSITION[8][1])
 RULER_PADDING_H = RULER_AREA_H / MAX_COEXIST_AURAS_AVAILABLE
-ELEMENT_COLOR = {
+AURA_COLORS = {
     ANEMO: (115, 248, 206),
     GEO: (255, 203, 99),
     PYRO: (252, 156, 13),
@@ -90,7 +90,7 @@ ELEMENT_COLOR = {
     CRYO: (152, 255, 254),
     DENDRO: (0, 158, 86)
 }
-REACTION_COLOR = {
+REACTION_COLORS = {
     'Swirl': (115, 248, 206),
     'Crystallize': (255, 155, 0),
     'Vaporize': (238, 202, 129),

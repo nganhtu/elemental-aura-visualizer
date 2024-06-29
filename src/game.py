@@ -40,7 +40,7 @@ def init():
     element_pngs = {}
     aura_pngs = {}
     for aura in AURA_NAMES:
-        img = pg.image.load(f"{path.AURAS + AURA_NAMES[aura]}.png")
+        img = pg.image.load(f"{path.AURAS + AURA_NAMES[aura]}.png")  # not case sensitive
         aura_pngs[aura] = img
         if aura in ELEMENTS:
             element_pngs[aura] = img
@@ -57,23 +57,33 @@ def draw_gauge_btns():
     global board, screen
     font = pg.font.Font(path.FONT['zh-cn'], GAUS)
     for gauge in AVAILABLE_GAUGES:
-        img = font.render(f"{gauge}U", True, TXTC_SELECTED if board.gauge == gauge else TXTC)
-        screen.blit(img, (SCRW - MARGIN + GPAD * GAUGE_BTN_POSITION[gauge][0],
+        text = font.render(f"{gauge}U", True, TXTC_SELECTED if board.gauge == gauge else TXTC)
+        screen.blit(text, (SCRW - MARGIN + GPAD * GAUGE_BTN_POSITION[gauge][0],
                           SCRH + (MARGIN + GAUB) * GAUGE_BTN_POSITION[gauge][1]))
 
 
 def draw_gametime_btn():
     global gametime, screen
     font = pg.font.Font(path.FONT['zh-cn'], GTIS)
-    img = font.render(f"{gametime.clock:.2f}", True, TXTC_SELECTED if gametime.isPaused else TXTC)
-    screen.blit(img, (SCRW - MARGIN - GPAD * TIME_LMUL, SCRH - MARGIN - GAUB))
-    img = font.render("s", True, TXTC_SELECTED if gametime.isPaused else TXTC)
-    screen.blit(img, (SCRW - MARGIN - GPAD * TIME_RMUL, SCRH - MARGIN - GAUB))
+    text = font.render(f"{gametime.clock:.2f}", True, TXTC_SELECTED if gametime.isPaused else TXTC)
+    screen.blit(text, (SCRW - MARGIN - GPAD * TIME_LMUL, SCRH - MARGIN - GAUB))
+    text = font.render("s", True, TXTC_SELECTED if gametime.isPaused else TXTC)
+    screen.blit(text, (SCRW - MARGIN - GPAD * TIME_RMUL, SCRH - MARGIN - GAUB))
 
 
-def draw_aura_bars():
-    global dummy
-    # TODO
+def draw_aura_bars_and_descriptions():
+    global dummy, screen
+    current_ruler = 0
+    for aura in dummy.auras:
+        current_ruler += 1
+        # draw aura bars
+        pg.draw.rect(screen, AURA_COLORS[aura.type], pg.Rect(
+            0, RULER_PADDING_H * current_ruler,
+            aura.gauge * RULER_W / MAX_AURA_GAUGE_AVAILABLE, RULER_H))
+        # draw aura descriptions
+        font = pg.font.Font(path.FONT['zh-cn'], 30)
+        text = font.render(f"{AURA_NAMES[aura.type]} aura, decay rate: {aura.decay_rate:.2f}s, current gauge: {aura.gauge:.2f}U", True, TXTC)
+        screen.blit(text, (MARGIN, RULER_PADDING_H * (current_ruler - 0.3)))
 
 
 def draw_division_lines():
@@ -95,7 +105,7 @@ def draw_screen():
     draw_element_btns()
     draw_gauge_btns()
     draw_gametime_btn()
-    draw_aura_bars()
+    draw_aura_bars_and_descriptions()
     draw_division_lines()
 
 

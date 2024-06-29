@@ -47,14 +47,14 @@ def decay_rate(gauge):
 
 
 class Element:
-    def __init__(self, ele, gauge):
-        self.ele = ele
+    def __init__(self, type, gauge):
+        self.type = type
         self.gauge = gauge
 
 
 class Aura(Element):
-    def __init__(self, ele, gauge, decay_rate):
-        super().__init__(ele, gauge)
+    def __init__(self, type, gauge, decay_rate):
+        super().__init__(type, gauge)
         self.decay_rate = decay_rate
         self.decay_speed = 1 / self.decay_rate
 
