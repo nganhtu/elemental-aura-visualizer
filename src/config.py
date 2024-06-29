@@ -3,7 +3,7 @@ from icecream import ic
 from genshin import *
 
 # Basics
-MS_IN_A_SEC = 1000
+MILLISECOND_TO_SECOND = 0.001
 
 
 # Genshin

@@ -154,7 +154,7 @@ def main():
         # flip() the display to put your work on screen
         pg.display.flip()
 
-        dt = clock.tick(FPS) / MS_IN_A_SEC
+        dt = clock.tick(FPS) * MILLISECOND_TO_SECOND
 
         # Update things
         gametime.update(dt)
