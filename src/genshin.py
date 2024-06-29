@@ -59,6 +59,7 @@ class Aura(Element):
         self.decay_speed = 1 / self.decay_rate
 
     def update(self, dt):
+        self.decay_speed = 1 / self.decay_rate
         if self.gauge > 0:
             self.gauge -= self.decay_speed * dt
         if self.gauge < 0:
