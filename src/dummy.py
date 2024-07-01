@@ -43,6 +43,8 @@ class Dummy:
             for aura in self.auras:
                 if aura_type == aura.type:
                     (element, aura, new_aura) = react(element, aura)
+                    if aura.gauge <= 0:
+                        self.auras.remove(aura)
                     if element.gauge <= 0:
                         break
                 # TODO react with freeze aura
