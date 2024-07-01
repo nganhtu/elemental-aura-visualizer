@@ -84,40 +84,64 @@ class FreezeAura(Element):
 REACT_MULT = 100  # "bigger number" element's multiplicator
 
 
-def create_react_notation(aura1, aura2):
+def get_reaction_notation(aura1, aura2):
     return aura1 * REACT_MULT + aura2 if aura1 > aura2 else aura2 * REACT_MULT + aura1
 
 
-SPREAD = create_react_notation(QUICKEN, DENDRO)
-AGGRAVATE = create_react_notation(QUICKEN, ELECTRO)
-Q_BLOOM = create_react_notation(QUICKEN, HYDRO)
-Q_BURNING = create_react_notation(QUICKEN, PYRO)
-F_SWIRL = create_react_notation(FREEZE, ANEMO)
-F_SUPERCONDUCT = create_react_notation(FREEZE, ELECTRO)
-SHATTER = create_react_notation(FREEZE, GEO)
-F_MELT = create_react_notation(FREEZE, PYRO)
-B_SWIRL = create_react_notation(BURNING, ANEMO)
-B_OVERLOADED = create_react_notation(BURNING, ELECTRO)
-B_CRYSTALLIZE = create_react_notation(BURNING, GEO)
-B_VAPORIZE = create_react_notation(BURNING, HYDRO)
-P_SWIRL = create_react_notation(PYRO, ANEMO)
-MELT = create_react_notation(PYRO, CRYO)
-REACTION_BURNING = create_react_notation(PYRO, DENDRO)
-OVERLOADED = create_react_notation(PYRO, ELECTRO)
-P_CRYSTALLIZE = create_react_notation(PYRO, GEO)
-VAPORIZE = create_react_notation(PYRO, HYDRO)
-H_SWIRL = create_react_notation(HYDRO, ANEMO)
-REACTION_FROZEN = create_react_notation(HYDRO, CRYO)
-BLOOM = create_react_notation(HYDRO, DENDRO)
-ELECTRO_CHARGED = create_react_notation(HYDRO, ELECTRO)
-H_CRYSTALLIZE = create_react_notation(HYDRO, GEO)
-C_CRYSTALLIZE = create_react_notation(GEO, CRYO)
-E_CRYSTALLIZE = create_react_notation(GEO, ELECTRO)
-E_SWIRL = create_react_notation(ELECTRO, ANEMO)
-SUPERCONDUCT = create_react_notation(ELECTRO, CRYO)
-REACTION_QUICKEN = create_react_notation(ELECTRO, DENDRO)
-C_SWIRL = create_react_notation(CRYO, ANEMO)
+SPREAD = get_reaction_notation(QUICKEN, DENDRO)
+AGGRAVATE = get_reaction_notation(QUICKEN, ELECTRO)
+Q_BLOOM = get_reaction_notation(QUICKEN, HYDRO)
+Q_BURNING = get_reaction_notation(QUICKEN, PYRO)
+F_SWIRL = get_reaction_notation(FREEZE, ANEMO)
+F_SUPERCONDUCT = get_reaction_notation(FREEZE, ELECTRO)
+SHATTER = get_reaction_notation(FREEZE, GEO)
+F_MELT = get_reaction_notation(FREEZE, PYRO)
+B_SWIRL = get_reaction_notation(BURNING, ANEMO)
+B_OVERLOADED = get_reaction_notation(BURNING, ELECTRO)
+B_CRYSTALLIZE = get_reaction_notation(BURNING, GEO)
+B_VAPORIZE = get_reaction_notation(BURNING, HYDRO)
+P_SWIRL = get_reaction_notation(PYRO, ANEMO)
+MELT = get_reaction_notation(PYRO, CRYO)
+REACTION_BURNING = get_reaction_notation(PYRO, DENDRO)
+OVERLOADED = get_reaction_notation(PYRO, ELECTRO)
+P_CRYSTALLIZE = get_reaction_notation(PYRO, GEO)
+VAPORIZE = get_reaction_notation(PYRO, HYDRO)
+H_SWIRL = get_reaction_notation(HYDRO, ANEMO)
+REACTION_FROZEN = get_reaction_notation(HYDRO, CRYO)
+BLOOM = get_reaction_notation(HYDRO, DENDRO)
+ELECTRO_CHARGED = get_reaction_notation(HYDRO, ELECTRO)
+H_CRYSTALLIZE = get_reaction_notation(HYDRO, GEO)
+C_CRYSTALLIZE = get_reaction_notation(GEO, CRYO)
+E_CRYSTALLIZE = get_reaction_notation(GEO, ELECTRO)
+E_SWIRL = get_reaction_notation(ELECTRO, ANEMO)
+SUPERCONDUCT = get_reaction_notation(ELECTRO, CRYO)
+REACTION_QUICKEN = get_reaction_notation(ELECTRO, DENDRO)
+C_SWIRL = get_reaction_notation(CRYO, ANEMO)
 ELEMENTAL_REACTIONS = (SPREAD, AGGRAVATE, Q_BLOOM, Q_BURNING, F_SWIRL, F_SUPERCONDUCT, SHATTER,
                        F_MELT, B_SWIRL, B_OVERLOADED, B_CRYSTALLIZE, B_VAPORIZE, P_SWIRL, MELT,
-                       REACTION_BURNING, OVERLOADED, P_CRYSTALLIZE, VAPORIZE, C_CRYSTALLIZE,
+                       REACTION_BURNING, OVERLOADED, P_CRYSTALLIZE, VAPORIZE, H_SWIRL,
+                       REACTION_FROZEN, BLOOM, ELECTRO_CHARGED, H_CRYSTALLIZE, C_CRYSTALLIZE,
                        E_CRYSTALLIZE, E_SWIRL, SUPERCONDUCT, REACTION_QUICKEN, C_SWIRL)
+
+
+def react(element, aura):
+    reaction = get_reaction_notation(element.type, aura.type)
+    if reaction in [F_SWIRL, B_SWIRL, P_SWIRL, H_SWIRL, E_SWIRL, C_SWIRL]:
+        return swirl(element, aura) if element.type == ANEMO else swirl(aura, element)
+    if reaction in [B_CRYSTALLIZE, P_CRYSTALLIZE, H_CRYSTALLIZE, C_CRYSTALLIZE, E_CRYSTALLIZE]:
+        return crystallize(element, aura) if element.type == GEO else crystallize(aura, element)
+    return element, aura, None
+
+
+def swirl(anemo, aura):
+    react_gauge = min(anemo.gauge / 2, aura.gauge)
+    anemo.gauge -= react_gauge * 2
+    aura.gauge -= react_gauge
+    return anemo, aura, None
+
+
+def crystallize(geo, aura):
+    react_gauge = min(geo.gauge / 2, aura.gauge)
+    geo.gauge -= react_gauge * 2
+    aura.gauge -= react_gauge
+    return geo, aura, None

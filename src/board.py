@@ -41,3 +41,4 @@ class Board:
     def press(self, keys):
         if keys[pg.K_SPACE]:
             return FLIP_GAMETIME
+        # TODO more key options

@@ -25,6 +25,7 @@ class Dummy:
     def update(self, dt):
         for aura in self.auras:
             aura.update(dt)
+            # TODO Electro-Charged
             if aura.gauge == 0:
                 ic('aura will be removed~')
                 self.auras.remove(aura)
@@ -41,14 +42,14 @@ class Dummy:
         for aura_type in SRP[element.type]:
             for aura in self.auras:
                 if aura_type == aura.type:
-                    # (element, aura, new_aura) = react(element, aura)
+                    (element, aura, new_aura) = react(element, aura)
                     if element.gauge <= 0:
                         break
                 # TODO react with freeze aura
             if element.gauge < 0:
                 break
 
-        if element.gauge > 0:
+        if element.gauge > 0 and element.type not in [ANEMO, GEO]:
             # Aura gauge extension
             cannot_find_the_same_aura = True
             for aura in self.auras:
@@ -63,3 +64,4 @@ class Dummy:
             if cannot_find_the_same_aura:
                 new_aura = Aura(element.type, AURA_TAX * element.gauge, decay_rate(element.gauge))
                 self.auras.append(new_aura)
+    # TODO return logs to game.py
