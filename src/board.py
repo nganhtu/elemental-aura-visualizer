@@ -5,8 +5,6 @@ from config import *
 
 
 class Board:
-    ACTIVE_KEYS = [pg.K_SPACE]
-
     def __init__(self):
         self.element = None
         self.gauge = None
@@ -38,7 +36,42 @@ class Board:
                 and SCREEN_HEIGHT - MARGIN - GAUGE_BTN_BORDER < y < SCREEN_HEIGHT - MARGIN:
             return FLIP_GAMETIME
 
+        return PURPOSE_NOT_DETECTED
+
     def press(self, keys):
         if keys[pg.K_SPACE]:
             return FLIP_GAMETIME
-        # TODO more key options
+        if keys[pg.K_LEFT]:
+            self.gauge = 1
+            return SET_GAUGE
+        if keys[pg.K_DOWN]:
+            self.gauge = 2
+            return SET_GAUGE
+        if keys[pg.K_RIGHT]:
+            self.gauge = 4
+            return SET_GAUGE
+        if keys[pg.K_UP]:
+            self.gauge = 8
+            return SET_GAUGE
+        if keys[pg.K_q]:
+            self.element = ANEMO
+            return APPLY_ELEMENT
+        if keys[pg.K_w]:
+            self.element = CRYO
+            return APPLY_ELEMENT
+        if keys[pg.K_e]:
+            self.element = DENDRO
+            return APPLY_ELEMENT
+        if keys[pg.K_r]:
+            self.element = ELECTRO
+            return APPLY_ELEMENT
+        if keys[pg.K_s]:
+            self.element = GEO
+            return APPLY_ELEMENT
+        if keys[pg.K_d]:
+            self.element = HYDRO
+            return APPLY_ELEMENT
+        if keys[pg.K_f]:
+            self.element = PYRO
+            return APPLY_ELEMENT
+        return PURPOSE_NOT_DETECTED

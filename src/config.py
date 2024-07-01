@@ -1,5 +1,7 @@
 from icecream import ic
 
+import pygame as pg
+
 from genshin import *
 
 # Basics
@@ -32,13 +34,15 @@ OPT_AUDIO = ("close_win.mp3", "open_win.mp3", "switch_task.mp3", "switch_type.mp
 # App
 CAPTION = "Elemental Reactions Visualizer"
 GAME_TIME_RESET_CAP = 100  # seconds
-
+ACTIVE_KEYS = (pg.K_SPACE, pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT,
+               pg.K_q, pg.K_w, pg.K_e, pg.K_r, pg.K_s, pg.K_d, pg.K_f)
 
 # Return code
-OK = 100
+PURPOSE_NOT_DETECTED = 100
 SET_GAUGE = 101
 APPLY_ELEMENT = 102
 FLIP_GAMETIME = 103
+RES_CODES_BOARD = (PURPOSE_NOT_DETECTED, SET_GAUGE, APPLY_ELEMENT, FLIP_GAMETIME)
 
 
 # Pygame

@@ -39,10 +39,10 @@ class Dummy:
     def affected_by(self, element):
         original_decay_rate = decay_rate(element.gauge)
 
-        for aura_type in SRP[element.type]:
+        for aura_type in SIMULTANEOUS_REACTION_PRIORITY[element.type]:
             for aura in self.auras:
                 if aura_type == aura.type:
-                    (element, aura, new_aura) = react(element, aura)
+                    element, aura, new_aura = react(element, aura)
                     if aura.gauge <= 0:
                         self.auras.remove(aura)
                     if element.gauge <= 0:

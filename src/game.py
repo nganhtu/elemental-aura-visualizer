@@ -126,34 +126,31 @@ def main():
     while running:
         # Poll for events
         for event in pg.event.get():
+            res = None
 
             if event.type == pg.QUIT or event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
                 play_audio['bark.wav']()
                 running = False
                 ic("Game quit on demand~")
 
-            if event.type == pg.KEYDOWN and event.key in Board.ACTIVE_KEYS:
+            if event.type == pg.KEYDOWN and event.key in ACTIVE_KEYS:
                 res = board.press(pg.key.get_pressed())
-
-                if res == FLIP_GAMETIME:
-                    play_audio['open_win.mp3']() if gametime.isPaused else play_audio['close_win.mp3']()
-                    gametime.isPaused = not gametime.isPaused
 
             if event.type == pg.MOUSEBUTTONDOWN:
                 x, y = pg.mouse.get_pos()
                 res = board.click(x, y)
 
+            if res in RES_CODES_BOARD:
                 if res == FLIP_GAMETIME:
                     play_audio['open_win.mp3']() if gametime.isPaused else play_audio['close_win.mp3']()
                     gametime.isPaused = not gametime.isPaused
-
                 elif res == SET_GAUGE:
                     play_audio['switch_type.mp3']()
                     ic("Gauge is set to~", board.gauge)
-
                 elif res == APPLY_ELEMENT:
                     if board.gauge is None:
-                        ic("Gauge is not chosen yet~")  # TODO warning to player
+                        play_audio['bark.wav']()
+                        ic("Gauge is not chosen yet~")
                     else:
                         play_audio['switch_task.mp3']()
                         dummy.affected_by(Element(board.element, board.gauge))
