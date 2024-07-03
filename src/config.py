@@ -22,6 +22,12 @@ AURA_NAMES = {
     QUICKEN: 'Quicken'
 }
 ELEMENT_NAMES = {key: AURA_NAMES[key] for key in AURA_NAMES if key in ELEMENTS}
+REACTION_LOG_NAMES = {
+    LOG_EXTEND_AURA: 'Extend aura',
+    LOG_APPLY_AURA: 'Apply aura',
+    LOG_SWIRL: 'Swirl',
+    LOG_CRYSTALLIZE: 'Crystallize'
+}
 
 
 # Assets
@@ -36,6 +42,7 @@ CAPTION = "Elemental Reactions Visualizer"
 GAME_TIME_RESET_CAP = 100  # seconds
 ACTIVE_KEYS = (pg.K_SPACE, pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT,
                pg.K_q, pg.K_w, pg.K_e, pg.K_r, pg.K_s, pg.K_d, pg.K_f)
+
 
 # Return code
 PURPOSE_NOT_DETECTED = 100
@@ -85,6 +92,9 @@ RULER_SMALL_LINE_W = 1
 RULER_SMALL_LINE_H = 20
 RULER_AREA_H = 0.9 * (SCREEN_HEIGHT + (MARGIN + GAUGE_BTN_BORDER) * GAUGE_BTN_POSITION[8][1])
 RULER_PADDING_H = RULER_AREA_H / MAX_COEXIST_AURAS_AVAILABLE
+FONT_SIZE_DESCRIPTION = 30
+FONT_SIZE_LOG = 20
+VISIBLE_LOGS_MAX_LINES = 20
 AURA_COLORS = {
     ANEMO: (115, 248, 206),
     GEO: (255, 203, 99),
@@ -94,16 +104,16 @@ AURA_COLORS = {
     CRYO: (152, 255, 254),
     DENDRO: (0, 158, 86)
 }
-REACTION_COLORS = {
-    'Swirl': (115, 248, 206),
-    'Crystallize': (255, 155, 0),
-    'Vaporize': (238, 202, 129),
-    'Overload': (248, 138, 155),
-    'Melt': (255, 202, 96),
-    'Electro-Charged': (220, 157, 247),
-    'Frozen': (156, 255, 255),
-    'Superconduct': (187, 180, 255),
-    'Burning': (252, 156, 13),
-    'Bloom': (0, 231, 75),
-    'Quicken': (0, 231, 86)
-}
+# REACTION_COLORS = {
+#     'Swirl': (115, 248, 206),
+#     'Crystallize': (255, 155, 0),
+#     'Vaporize': (238, 202, 129),
+#     'Overload': (248, 138, 155),
+#     'Melt': (255, 202, 96),
+#     'Electro-Charged': (220, 157, 247),
+#     'Frozen': (156, 255, 255),
+#     'Superconduct': (187, 180, 255),
+#     'Burning': (252, 156, 13),
+#     'Bloom': (0, 231, 75),
+#     'Quicken': (0, 231, 86)
+# }

@@ -1,6 +1,5 @@
 from icecream import ic
 
-import pygame as pg
 from config import *
 
 

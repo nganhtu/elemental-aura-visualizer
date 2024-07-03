@@ -11,6 +11,8 @@
 
 from icecream import ic
 
+from log import Log
+
 
 ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO = 0, 1, 2, 3, 4, 5, 6  # do not change
 BURNING, FREEZE, QUICKEN = 10, 11, 12  # keep order when change
@@ -123,25 +125,34 @@ ELEMENTAL_REACTIONS = (SPREAD, AGGRAVATE, Q_BLOOM, Q_BURNING, F_SWIRL, F_SUPERCO
                        REACTION_FROZEN, BLOOM, ELECTRO_CHARGED, H_CRYSTALLIZE, C_CRYSTALLIZE,
                        E_CRYSTALLIZE, E_SWIRL, SUPERCONDUCT, REACTION_QUICKEN, C_SWIRL)
 
+# The following constants should have opposite sign to the above
+LOG_EXTEND_AURA = -1
+LOG_APPLY_AURA = -2
+LOG_SWIRL = -3
+LOG_CRYSTALLIZE = -4
+
 
 def react(element, aura):
     reaction = get_reaction_notation(element.type, aura.type)
+    # 6
     if reaction in [F_SWIRL, B_SWIRL, P_SWIRL, H_SWIRL, E_SWIRL, C_SWIRL]:
         return swirl(element, aura) if element.type == ANEMO else swirl(aura, element)
+    # 5
     if reaction in [B_CRYSTALLIZE, P_CRYSTALLIZE, H_CRYSTALLIZE, C_CRYSTALLIZE, E_CRYSTALLIZE]:
         return crystallize(element, aura) if element.type == GEO else crystallize(aura, element)
-    return element, aura, None
+
+    return element, aura, None, None
 
 
 def swirl(anemo, aura):
     react_gauge = min(anemo.gauge / 2, aura.gauge)
     anemo.gauge -= react_gauge * 2
     aura.gauge -= react_gauge
-    return anemo, aura, None
+    return anemo, aura, None, Log(LOG_SWIRL, react_gauge)
 
 
 def crystallize(geo, aura):
     react_gauge = min(geo.gauge / 2, aura.gauge)
     geo.gauge -= react_gauge * 2
     aura.gauge -= react_gauge
-    return geo, aura, None
+    return geo, aura, None, Log(LOG_CRYSTALLIZE, react_gauge)

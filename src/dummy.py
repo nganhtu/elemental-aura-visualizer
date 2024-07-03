@@ -37,33 +37,42 @@ class Dummy:
         self.update_freeze_decay_speed(dt)
 
     def affected_by(self, element):
+        logs = []
         original_decay_rate = decay_rate(element.gauge)
 
         for aura_type in SIMULTANEOUS_REACTION_PRIORITY[element.type]:
             for aura in self.auras:
                 if aura_type == aura.type:
-                    element, aura, new_aura = react(element, aura)
+                    element, aura, result_aura, log = react(element, aura)
                     if aura.gauge <= 0:
                         self.auras.remove(aura)
+                    if result_aura is not None:
+                        self.auras.append(result_aura)
+                    if log is not None:
+                        logs.append(log)
                     if element.gauge <= 0:
                         break
-                # TODO react with freeze aura
-            if element.gauge < 0:
+            if element.gauge <= 0:
                 break
+            # TODO react with freeze aura
 
         if element.gauge > 0 and element.type not in [ANEMO, GEO]:
             # Aura gauge extension
             cannot_find_the_same_aura = True
             for aura in self.auras:
                 if element.type == aura.type:
-                    # Pyro does not have decay rate inheritance
-                    if element.type == PYRO and AURA_TAX * element.gauge > aura.gauge:
-                        aura.decay_rate = original_decay_rate
-                    aura.gauge = max(aura.gauge, AURA_TAX * element.gauge)
+                    if aura.gauge < AURA_TAX * element.gauge:
+                        aura.gauge = AURA_TAX * element.gauge
+                        logs.append(Log(LOG_EXTEND_AURA, aura.gauge))
+                        # Pyro does not have decay rate inheritance
+                        if element.type == PYRO:
+                            aura.decay_rate = original_decay_rate
                     cannot_find_the_same_aura = False
                     break
             # Apply new aura
             if cannot_find_the_same_aura:
                 new_aura = Aura(element.type, AURA_TAX * element.gauge, decay_rate(element.gauge))
                 self.auras.append(new_aura)
-    # TODO return logs to game.py
+                logs.append(Log(LOG_APPLY_AURA, new_aura.gauge))
+
+        return logs

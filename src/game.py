@@ -21,6 +21,7 @@ aura_pngs = None
 board = None
 gametime = None
 dummy = None
+logs = None
 
 
 def init():
@@ -83,7 +84,7 @@ def draw_aura_bars_and_descriptions():
             0, RULER_PADDING_H * current_ruler,
             aura.gauge * RULER_W / MAX_AURA_GAUGE_AVAILABLE, RULER_H))
         # draw aura descriptions
-        font = pg.font.Font(path.FONT['zh-cn'], 30)
+        font = pg.font.Font(path.FONT['zh-cn'], FONT_SIZE_DESCRIPTION)
         text = font.render(f"{AURA_NAMES[aura.type]} aura, decay rate: {aura.decay_rate:.2f}s, current gauge: {aura.gauge:.2f}U", True, TEXT_COLOR)
         screen.blit(text, (MARGIN, RULER_PADDING_H * (current_ruler - 0.3)))
 
@@ -101,6 +102,16 @@ def draw_division_lines():
                 RULER_SMALL_LINE_W, RULER_SMALL_LINE_H))
 
 
+def draw_logs():
+    global logs, screen
+    visible_logs = logs[-VISIBLE_LOGS_MAX_LINES:]
+    visible_logs.reverse()
+    font = pg.font.Font(path.FONT['zh-cn'], FONT_SIZE_LOG)
+    for i in range(len(visible_logs)):
+        text = font.render(f"{visible_logs[i].gametime_clock:.2f}s: {REACTION_LOG_NAMES[visible_logs[i].reaction_notation]} {visible_logs[i].react_gauge:.2f}U", True, TEXT_COLOR)  # TODO localization
+        screen.blit(text, (RULER_W + MARGIN, RULER_AREA_H * (1 - i / VISIBLE_LOGS_MAX_LINES)))
+
+
 def draw_screen():
     global screen
     screen.fill(BACKGROUND_COLOR)
@@ -109,10 +120,11 @@ def draw_screen():
     draw_gametime_btn()
     draw_aura_bars_and_descriptions()
     draw_division_lines()
+    draw_logs()
 
 
 def main():
-    global running, dt, board, gametime, dummy
+    global running, dt, board, gametime, dummy, logs
 
     init()
 
@@ -122,6 +134,7 @@ def main():
     board = Board()
     gametime = Gametime()
     dummy = Dummy()
+    logs = []
 
     while running:
         # Poll for events
@@ -153,8 +166,10 @@ def main():
                         ic("Gauge is not chosen yet~")
                     else:
                         play_audio['switch_task.mp3']()
-                        dummy.affected_by(Element(board.element, board.gauge))
-                        # TODO print log with localization
+                        current_logs = dummy.affected_by(Element(board.element, board.gauge))
+                        for log in current_logs:
+                            log.gametime_clock = gametime.clock
+                            logs.append(log)
 
         # Wipe away anything from last frame; then draw current frame
         draw_screen()
