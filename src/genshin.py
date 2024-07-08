@@ -137,10 +137,10 @@ POST_REACT_AURA_APPLIABLE_REACTIONS = (ELECTRO_CHARGED, SPREAD, AGGRAVATE)
 
 
 # The following constants should have opposite sign to the above
-LOG_CODES_COUNTER = 11
+LOG_CODES_COUNTER = 13
 LOG_CODES = (-i - 1 for i in range(LOG_CODES_COUNTER))
 LOG_EXTEND_AURA, LOG_APPLY_AURA, LOG_SWIRL, LOG_CRYSTALLIZE, LOG_MELT, LOG_OVERLOADED, LOG_VAPORIZE, \
-LOG_BLOOM, LOG_SUPERCONDUCT, LOG_ELECTRO_CHARGED, LOG_QUICKEN = LOG_CODES
+LOG_BLOOM, LOG_SUPERCONDUCT, LOG_ELECTRO_CHARGED, LOG_QUICKEN, LOG_SPREAD, LOG_AGGRAVATE = LOG_CODES
 
 
 def react(element, aura):
@@ -166,8 +166,15 @@ def react(element, aura):
     # 1
     if reaction == SUPERCONDUCT:
         return superconduct(element, aura)
+    # 1
     if reaction == REACTION_QUICKEN:
         return quicken(element, aura)
+    # 1
+    if reaction == SPREAD:
+        return spread(element, aura)
+    # 1
+    if reaction == AGGRAVATE:
+        return aggravate(element, aura)
 
     return element, aura, None, None
 
@@ -264,3 +271,11 @@ def quicken(element, aura):
     aura.gauge -= react_gauge
     quicken_aura = Aura(QUICKEN, react_gauge, quicken_decay_rate(react_gauge))
     return element, aura, quicken_aura, Log(LOG_QUICKEN, react_gauge)
+
+
+def spread(element, aura):
+    return element, aura, None, Log(LOG_SPREAD, 0)
+
+
+def aggravate(element, aura):
+    return element, aura, None, Log(LOG_AGGRAVATE, 0)

@@ -33,7 +33,9 @@ REACTION_LOG_NAMES = {
     LOG_BLOOM: 'Bloom',
     LOG_SUPERCONDUCT: 'Superconduct',
     LOG_ELECTRO_CHARGED: 'Electro-Charged',
-    LOG_QUICKEN: 'Quicken'
+    LOG_QUICKEN: 'Quicken',
+    LOG_SPREAD: 'Spread',
+    LOG_AGGRAVATE: ' Aggravate'
 }
 
 

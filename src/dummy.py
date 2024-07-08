@@ -85,7 +85,7 @@ class Dummy:
 
         for aura_type in SIMULTANEOUS_REACTION_PRIORITY[element.type]:
             for aura in self.auras:
-                if aura_type == aura.type:
+                if aura.type == aura_type:
                     reaction_notation = get_reaction_notation(element.type, aura.type)
                     if reaction_notation not in POST_REACT_AURA_APPLIABLE_REACTIONS:
                         can_apply_element = False
@@ -93,6 +93,11 @@ class Dummy:
                     if aura.gauge <= 0:
                         self.auras.remove(aura)
                     if result_aura is not None:
+                        # TODO check with Freeze and Burning situations
+                        # FIXME "... and refresh Quicken." ~ no evidence yet
+                        for aura in self.auras:
+                            if aura.type == result_aura.type:
+                                self.auras.remove(aura)
                         self.auras.append(result_aura)
                     if log is not None:
                         logs.append(log)
