@@ -108,7 +108,7 @@ def draw_logs():
     visible_logs.reverse()
     font = pg.font.Font(path.FONT['zh-cn'], FONT_SIZE_LOG)
     for i in range(len(visible_logs)):
-        text = font.render(f"{visible_logs[i].gametime_clock:.2f}s: {REACTION_LOG_NAMES[visible_logs[i].reaction_notation]} {visible_logs[i].react_gauge:.2f}U", True, TEXT_COLOR)  # TODO localization
+        text = font.render(f"{visible_logs[i].happen_time:.2f}s: {REACTION_LOG_NAMES[visible_logs[i].reaction_notation]} {visible_logs[i].react_gauge:.2f}U", True, TEXT_COLOR)  # TODO localization
         screen.blit(text, (RULER_W + MARGIN, RULER_AREA_H * (1 - i / VISIBLE_LOGS_MAX_LINES)))
 
 
@@ -166,10 +166,8 @@ def main():
                         ic("Gauge is not chosen yet~")
                     else:
                         play_audio['switch_task.mp3']()
-                        current_logs = dummy.affected_by(Element(board.element, board.gauge))
-                        for log in current_logs:
-                            log.gametime_clock = gametime.clock
-                            logs.append(log)
+                        recent_logs = dummy.affected_by(Element(board.element, board.gauge))
+                        logs.extend(recent_logs)
 
         # Wipe away anything from last frame; then draw current frame
         draw_screen()
@@ -184,10 +182,8 @@ def main():
         # Update things
         gametime.update(dt)
         if not gametime.isPaused:
-            current_logs = dummy.update(dt)
-            for log in current_logs:
-                log.gametime_clock = gametime.clock
-                logs.append(log)
+            recent_logs = dummy.update(gametime.clock, dt)
+            logs.extend(recent_logs)
 
     pg.quit()
 

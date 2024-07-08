@@ -37,6 +37,7 @@ class Dummy:
         else:  # EC final tick
             log = Log(LOG_ELECTRO_CHARGED, 0)
         self.last_ec_tick_timestamp = happen_time
+        log.happen_time = happen_time
         return log
 
     def electro_charged_update(self):
@@ -58,9 +59,9 @@ class Dummy:
         self.is_electro_charged = True
         return log
 
-    def update(self, dt):
+    def update(self, gametime_clock, dt):
         logs = []
-        self.time += dt
+        self.time = gametime_clock
         log = self.electro_charged_update()
         if log is not None:
             logs.append(log)
@@ -120,4 +121,6 @@ class Dummy:
                 self.auras.append(new_aura)
                 logs.append(Log(LOG_APPLY_AURA, new_aura.gauge))
 
+        for log in logs:
+            log.happen_time = self.time
         return logs
