@@ -184,7 +184,10 @@ def main():
         # Update things
         gametime.update(dt)
         if not gametime.isPaused:
-            dummy.update(dt)
+            current_logs = dummy.update(dt)
+            for log in current_logs:
+                log.gametime_clock = gametime.clock
+                logs.append(log)
 
     pg.quit()
 

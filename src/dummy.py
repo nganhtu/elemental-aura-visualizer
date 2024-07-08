@@ -9,6 +9,8 @@ class Dummy:
         self.auras = []
         self.freeze_aura = None
         self.freeze_aura_decay_speed = FREEZE_AURA_STARTING_DECAY_SPEED
+        self.is_electro_charged = False
+        self.last_ec_tick_timestamp = None
 
     def is_frozen(self):
         return self.freeze_aura is not None
@@ -22,10 +24,48 @@ class Dummy:
             if self.freeze_aura_decay_speed < FREEZE_AURA_STARTING_DECAY_SPEED:
                 self.freeze_aura_decay_speed = FREEZE_AURA_STARTING_DECAY_SPEED
 
+    def electro_charged_occur(self, happen_time):
+        electro = None
+        hydro = None
+        for aura in self.auras:
+            if aura.type == ELECTRO:
+                electro = aura
+            elif aura.type == HYDRO:
+                hydro = aura
+        if electro is not None and hydro is not None:
+            log = electro_charged_tick(electro, hydro)
+        else:  # EC final tick
+            log = Log(LOG_ELECTRO_CHARGED, 0)
+        self.last_ec_tick_timestamp = happen_time
+        return log
+
+    def electro_charged_update(self):
+        log = None
+        aura_types = [aura.type for aura in self.auras]
+        if ELECTRO not in aura_types or HYDRO not in aura_types:
+            if self.is_electro_charged:
+                if self.time - self.last_ec_tick_timestamp >= EC_FINAL_TICK_ICD:
+                    log = self.electro_charged_occur(self.time)
+                self.is_electro_charged = False
+            return log
+        # new EC occured should ignore EC_FINAL_TICK_ICD
+        if not self.is_electro_charged:
+            log = self.electro_charged_occur(self.time)
+        else:
+            internal_time = self.time - self.last_ec_tick_timestamp
+            if internal_time >= EC_TICK_ICD:
+                log = self.electro_charged_occur(self.last_ec_tick_timestamp + EC_TICK_ICD)
+        self.is_electro_charged = True
+        return log
+
     def update(self, dt):
+        logs = []
+        self.time += dt
+        log = self.electro_charged_update()
+        if log is not None:
+            logs.append(log)
         for aura in self.auras:
             aura.update(dt)
-            # TODO Electro-Charged
             if aura.gauge == 0:
                 ic('aura will be removed~')
                 self.auras.remove(aura)
@@ -35,16 +75,19 @@ class Dummy:
                 ic('freeze aura will be removed~')
                 self.freeze_aura = None
         self.update_freeze_decay_speed(dt)
+        return logs
 
     def affected_by(self, element):
         logs = []
         original_decay_rate = decay_rate(element.gauge)
-        reaction_occured = False
+        can_apply_element = True
 
         for aura_type in SIMULTANEOUS_REACTION_PRIORITY[element.type]:
             for aura in self.auras:
                 if aura_type == aura.type:
-                    reaction_occured = True
+                    reaction_notation = get_reaction_notation(element.type, aura.type)
+                    if reaction_notation not in POST_REACT_AURA_APPLIABLE_REACTIONS:
+                        can_apply_element = False
                     element, aura, result_aura, log = react(element, aura)
                     if aura.gauge <= 0:
                         self.auras.remove(aura)
@@ -58,7 +101,7 @@ class Dummy:
                 break
             # TODO react with freeze aura
 
-        if not reaction_occured and element.gauge > 0 and element.type not in [ANEMO, GEO]:
+        if can_apply_element and element.gauge > 0 and element.type not in [ANEMO, GEO]:
             # Aura gauge extension
             cannot_find_the_same_aura = True
             for aura in self.auras:

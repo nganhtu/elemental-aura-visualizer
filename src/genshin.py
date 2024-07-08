@@ -21,7 +21,7 @@ AURAS = (ANEMO, CRYO, DENDRO, ELECTRO, GEO, HYDRO, PYRO, BURNING, FREEZE, QUICKE
 
 
 AURA_TAX = 0.8
-AVAILABLE_GAUGES = (1, 1.5, 2, 4, 8)
+AVAILABLE_GAUGES = (1, 1.5, 2, 4, 8)  # U
 MAX_AURA_GAUGE_AVAILABLE = max(AVAILABLE_GAUGES) * AURA_TAX
 MAX_COEXIST_AURAS_AVAILABLE = 3
 SIMULTANEOUS_REACTION_PRIORITY = {
@@ -38,6 +38,9 @@ SIMULTANEOUS_REACTION_PRIORITY = {
 FREEZE_AURA_STARTING_DECAY_SPEED = 0.4  # U/s
 FREEZE_AURA_DECAY_ACCELERATION_RATE = 0.1  # U/s^2
 FREEZE_AURA_RESTORE_ACCELERATION_RATE = -0.2  # U/s^2
+EC_GAUGE_DECAY = 0.4  # U
+EC_TICK_ICD = 1  # s
+EC_FINAL_TICK_ICD = 0.5  # s
 
 
 def decay_rate(gauge):
@@ -126,12 +129,14 @@ ELEMENTAL_REACTIONS = (SPREAD, AGGRAVATE, Q_BLOOM, Q_BURNING, F_SWIRL, F_SUPERCO
                        REACTION_BURNING, OVERLOADED, P_CRYSTALLIZE, VAPORIZE, H_SWIRL,
                        REACTION_FROZEN, BLOOM, ELECTRO_CHARGED, H_CRYSTALLIZE, C_CRYSTALLIZE,
                        E_CRYSTALLIZE, E_SWIRL, SUPERCONDUCT, REACTION_QUICKEN, C_SWIRL)
+POST_REACT_AURA_APPLIABLE_REACTIONS = (ELECTRO_CHARGED, SPREAD, AGGRAVATE)
+
 
 # The following constants should have opposite sign to the above
-LOG_CODES_COUNTER = 9
+LOG_CODES_COUNTER = 10
 LOG_CODES = (-i - 1 for i in range(LOG_CODES_COUNTER))
 LOG_EXTEND_AURA, LOG_APPLY_AURA, LOG_SWIRL, LOG_CRYSTALLIZE, LOG_MELT, LOG_OVERLOADED, LOG_VAPORIZE, \
-LOG_BLOOM, LOG_SUPERCONDUCT = LOG_CODES
+LOG_BLOOM, LOG_SUPERCONDUCT, LOG_ELECTRO_CHARGED = LOG_CODES
 
 
 def react(element, aura):
@@ -238,3 +243,10 @@ def superconduct(element, aura):
     element.gauge -= react_gauge
     aura.gauge -= react_gauge
     return element, aura, None, Log(LOG_SUPERCONDUCT, react_gauge)
+
+
+def electro_charged_tick(electro, hydro):
+    react_gauge = min(electro.gauge, hydro.gauge, EC_GAUGE_DECAY)
+    electro.gauge -= react_gauge
+    hydro.gauge -= react_gauge
+    return Log(LOG_ELECTRO_CHARGED, react_gauge)

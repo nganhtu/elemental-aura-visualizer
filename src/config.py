@@ -31,7 +31,8 @@ REACTION_LOG_NAMES = {
     LOG_OVERLOADED: 'Overloaded',
     LOG_VAPORIZE: 'Vaporize',
     LOG_BLOOM: 'Bloom',
-    LOG_SUPERCONDUCT: 'Superconduct'
+    LOG_SUPERCONDUCT: 'Superconduct',
+    LOG_ELECTRO_CHARGED: 'Electro-Charged'
 }
 
 
