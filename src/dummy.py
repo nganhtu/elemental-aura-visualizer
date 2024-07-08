@@ -87,7 +87,7 @@ class Dummy:
             for aura in self.auras:
                 if aura.type == aura_type:
                     reaction_notation = get_reaction_notation(element.type, aura.type)
-                    if reaction_notation not in POST_REACT_AURA_APPLIABLE_REACTIONS:
+                    if reaction_notation not in POST_REACT_AURA_APPLICABLE_REACTIONS:
                         can_apply_element = False
                     element, aura, result_aura, log = react(element, aura)
                     if aura.gauge <= 0:
