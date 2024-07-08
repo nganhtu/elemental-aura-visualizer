@@ -27,7 +27,11 @@ REACTION_LOG_NAMES = {
     LOG_APPLY_AURA: 'Apply aura',
     LOG_SWIRL: 'Swirl',
     LOG_CRYSTALLIZE: 'Crystallize',
-    LOG_MELT: 'Melt'
+    LOG_MELT: 'Melt',
+    LOG_OVERLOADED: 'Overloaded',
+    LOG_VAPORIZE: 'Vaporize',
+    LOG_BLOOM: 'Bloom',
+    LOG_SUPERCONDUCT: 'Superconduct'
 }
 
 

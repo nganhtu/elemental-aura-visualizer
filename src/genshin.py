@@ -128,11 +128,10 @@ ELEMENTAL_REACTIONS = (SPREAD, AGGRAVATE, Q_BLOOM, Q_BURNING, F_SWIRL, F_SUPERCO
                        E_CRYSTALLIZE, E_SWIRL, SUPERCONDUCT, REACTION_QUICKEN, C_SWIRL)
 
 # The following constants should have opposite sign to the above
-LOG_EXTEND_AURA = -1
-LOG_APPLY_AURA = -2
-LOG_SWIRL = -3
-LOG_CRYSTALLIZE = -4
-LOG_MELT = -5
+LOG_CODES_COUNTER = 9
+LOG_CODES = (-i - 1 for i in range(LOG_CODES_COUNTER))
+LOG_EXTEND_AURA, LOG_APPLY_AURA, LOG_SWIRL, LOG_CRYSTALLIZE, LOG_MELT, LOG_OVERLOADED, LOG_VAPORIZE, \
+LOG_BLOOM, LOG_SUPERCONDUCT = LOG_CODES
 
 
 def react(element, aura):
@@ -140,12 +139,24 @@ def react(element, aura):
     # 6
     if reaction in [F_SWIRL, B_SWIRL, P_SWIRL, H_SWIRL, E_SWIRL, C_SWIRL]:
         return swirl(element, aura)
-    # 5
+    # 1
     if reaction in [B_CRYSTALLIZE, P_CRYSTALLIZE, H_CRYSTALLIZE, C_CRYSTALLIZE, E_CRYSTALLIZE]:
         return crystallize(element, aura)
     # 1
     if reaction == MELT:
         return melt(element, aura)
+    # 1
+    if reaction == OVERLOADED:
+        return overloaded(element, aura)
+    # 1
+    if reaction == VAPORIZE:
+        return vaporize(element, aura)
+    # 1
+    if reaction == BLOOM:
+        return bloom(element, aura)
+    # 1
+    if reaction == SUPERCONDUCT:
+        return superconduct(element, aura)
 
     return element, aura, None, None
 
@@ -187,3 +198,43 @@ def melt(element, aura):
     cryo.gauge -= react_gauge * 2
     pyro.gauge -= react_gauge
     return element, aura, None, Log(LOG_MELT, react_gauge)
+
+
+def overloaded(element, aura):
+    react_gauge = min(element.gauge, aura.gauge)
+    element.gauge -= react_gauge
+    aura.gauge -= react_gauge
+    return element, aura, None, Log(LOG_OVERLOADED, react_gauge)
+
+
+def vaporize(element, aura):
+    if element.type == PYRO:
+        pyro = element
+        hydro = aura
+    else:
+        pyro = aura
+        hydro = element
+    react_gauge = min(pyro.gauge / 2, hydro.gauge)
+    pyro.gauge -= react_gauge * 2
+    hydro.gauge -= react_gauge
+    return element, aura, None, Log(LOG_VAPORIZE, react_gauge)
+
+
+def bloom(element, aura):
+    if element.type == HYDRO:
+        hydro = element
+        dendro = aura
+    else:
+        hydro = aura
+        dendro = element
+    react_gauge = min(hydro.gauge / 2, dendro.gauge)
+    hydro.gauge -= react_gauge * 2
+    dendro.gauge -= react_gauge
+    return element, aura, None, Log(LOG_BLOOM, react_gauge)
+
+
+def superconduct(element, aura):
+    react_gauge = min(element.gauge, aura.gauge)
+    element.gauge -= react_gauge
+    aura.gauge -= react_gauge
+    return element, aura, None, Log(LOG_SUPERCONDUCT, react_gauge)
