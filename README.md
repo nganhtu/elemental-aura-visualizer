@@ -1,5 +1,5 @@
 # Installation
-From the Terminal, run:
+From the terminal, run:
 ```
 pip install -r requirements.txt
 py game.py
