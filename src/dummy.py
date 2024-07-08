@@ -49,7 +49,7 @@ class Dummy:
                     log = self.electro_charged_occur(self.time)
                 self.is_electro_charged = False
             return log
-        # new EC occured should ignore EC_FINAL_TICK_ICD
+        # new EC occurred should ignore EC_FINAL_TICK_ICD
         if not self.is_electro_charged:
             log = self.electro_charged_occur(self.time)
         else:
@@ -95,9 +95,9 @@ class Dummy:
                     if result_aura is not None:
                         # TODO check with Freeze and Burning situations
                         # FIXME "... and refresh Quicken." ~ no evidence yet
-                        for aura in self.auras:
-                            if aura.type == result_aura.type:
-                                self.auras.remove(aura)
+                        for tmp_aura in self.auras:
+                            if tmp_aura.type == result_aura.type:
+                                self.auras.remove(tmp_aura)
                         self.auras.append(result_aura)
                     if log is not None:
                         logs.append(log)
