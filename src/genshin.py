@@ -53,6 +53,10 @@ def decay_rate(gauge):
         return float('inf')
 
 
+def quicken_decay_rate(quicken_gauge):
+    return 5 * quicken_gauge + 6
+
+
 class Element:
     def __init__(self, type, gauge):
         self.type = type
@@ -133,10 +137,10 @@ POST_REACT_AURA_APPLIABLE_REACTIONS = (ELECTRO_CHARGED, SPREAD, AGGRAVATE)
 
 
 # The following constants should have opposite sign to the above
-LOG_CODES_COUNTER = 10
+LOG_CODES_COUNTER = 11
 LOG_CODES = (-i - 1 for i in range(LOG_CODES_COUNTER))
 LOG_EXTEND_AURA, LOG_APPLY_AURA, LOG_SWIRL, LOG_CRYSTALLIZE, LOG_MELT, LOG_OVERLOADED, LOG_VAPORIZE, \
-LOG_BLOOM, LOG_SUPERCONDUCT, LOG_ELECTRO_CHARGED = LOG_CODES
+LOG_BLOOM, LOG_SUPERCONDUCT, LOG_ELECTRO_CHARGED, LOG_QUICKEN = LOG_CODES
 
 
 def react(element, aura):
@@ -162,6 +166,8 @@ def react(element, aura):
     # 1
     if reaction == SUPERCONDUCT:
         return superconduct(element, aura)
+    if reaction == REACTION_QUICKEN:
+        return quicken(element, aura)
 
     return element, aura, None, None
 
@@ -250,3 +256,11 @@ def electro_charged_tick(electro, hydro):
     electro.gauge -= react_gauge
     hydro.gauge -= react_gauge
     return Log(LOG_ELECTRO_CHARGED, react_gauge)
+
+
+def quicken(element, aura):
+    react_gauge = min(element.gauge, aura.gauge)
+    element.gauge -= react_gauge
+    aura.gauge -= react_gauge
+    quicken_aura = Aura(QUICKEN, react_gauge, quicken_decay_rate(react_gauge))
+    return element, aura, quicken_aura, Log(LOG_QUICKEN, react_gauge)

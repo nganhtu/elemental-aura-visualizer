@@ -32,7 +32,8 @@ REACTION_LOG_NAMES = {
     LOG_VAPORIZE: 'Vaporize',
     LOG_BLOOM: 'Bloom',
     LOG_SUPERCONDUCT: 'Superconduct',
-    LOG_ELECTRO_CHARGED: 'Electro-Charged'
+    LOG_ELECTRO_CHARGED: 'Electro-Charged',
+    LOG_QUICKEN: 'Quicken'
 }
 
 
@@ -108,7 +109,10 @@ AURA_COLORS = {
     HYDRO: (63, 197, 255),
     ELECTRO: (220, 157, 247),
     CRYO: (152, 255, 254),
-    DENDRO: (0, 158, 86)
+    DENDRO: (0, 158, 86),
+    BURNING: (252, 156, 13),
+    FREEZE: (156, 255, 255),
+    QUICKEN: (0, 231, 86)
 }
 # REACTION_COLORS = {
 #     'Swirl': (115, 248, 206),
