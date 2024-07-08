@@ -44,6 +44,8 @@ def decay_rate(gauge):
     if gauge in AVAILABLE_GAUGES:
         return (2.5 * gauge + 7) / (AURA_TAX * gauge)
     else:
+        # for debug purpose
+        # still there should be nothing may apply a gauge out of AVAILABLE_GAUGES
         ic('gauge is not available!', gauge)
         return float('inf')
 
@@ -130,29 +132,58 @@ LOG_EXTEND_AURA = -1
 LOG_APPLY_AURA = -2
 LOG_SWIRL = -3
 LOG_CRYSTALLIZE = -4
+LOG_MELT = -5
 
 
 def react(element, aura):
     reaction = get_reaction_notation(element.type, aura.type)
     # 6
     if reaction in [F_SWIRL, B_SWIRL, P_SWIRL, H_SWIRL, E_SWIRL, C_SWIRL]:
-        return swirl(element, aura) if element.type == ANEMO else swirl(aura, element)
+        return swirl(element, aura)
     # 5
     if reaction in [B_CRYSTALLIZE, P_CRYSTALLIZE, H_CRYSTALLIZE, C_CRYSTALLIZE, E_CRYSTALLIZE]:
-        return crystallize(element, aura) if element.type == GEO else crystallize(aura, element)
+        return crystallize(element, aura)
+    # 1
+    if reaction == MELT:
+        return melt(element, aura)
 
     return element, aura, None, None
 
 
-def swirl(anemo, aura):
-    react_gauge = min(anemo.gauge / 2, aura.gauge)
+def swirl(element, aura):
+    if element.type == ANEMO:
+        anemo = element
+        another = aura
+    else:
+        anemo = aura
+        another = element
+    react_gauge = min(anemo.gauge / 2, another.gauge)
     anemo.gauge -= react_gauge * 2
-    aura.gauge -= react_gauge
-    return anemo, aura, None, Log(LOG_SWIRL, react_gauge)
+    another.gauge -= react_gauge
+    return element, aura, None, Log(LOG_SWIRL, react_gauge)
 
 
-def crystallize(geo, aura):
-    react_gauge = min(geo.gauge / 2, aura.gauge)
+def crystallize(element, aura):
+    if element.type == GEO:
+        geo = element
+        another = aura
+    else:
+        geo = aura
+        another = element
+    react_gauge = min(geo.gauge / 2, another.gauge)
     geo.gauge -= react_gauge * 2
-    aura.gauge -= react_gauge
-    return geo, aura, None, Log(LOG_CRYSTALLIZE, react_gauge)
+    another.gauge -= react_gauge
+    return element, aura, None, Log(LOG_CRYSTALLIZE, react_gauge)
+
+
+def melt(element, aura):
+    if element.type == CRYO:
+        cryo = element
+        pyro = aura
+    else:
+        cryo = aura
+        pyro = element
+    react_gauge = min(cryo.gauge / 2, pyro.gauge)
+    cryo.gauge -= react_gauge * 2
+    pyro.gauge -= react_gauge
+    return element, aura, None, Log(LOG_MELT, react_gauge)

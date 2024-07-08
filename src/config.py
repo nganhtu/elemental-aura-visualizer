@@ -26,7 +26,8 @@ REACTION_LOG_NAMES = {
     LOG_EXTEND_AURA: 'Extend aura',
     LOG_APPLY_AURA: 'Apply aura',
     LOG_SWIRL: 'Swirl',
-    LOG_CRYSTALLIZE: 'Crystallize'
+    LOG_CRYSTALLIZE: 'Crystallize',
+    LOG_MELT: 'Melt'
 }
 
 

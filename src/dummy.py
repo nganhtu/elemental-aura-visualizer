@@ -39,10 +39,12 @@ class Dummy:
     def affected_by(self, element):
         logs = []
         original_decay_rate = decay_rate(element.gauge)
+        reaction_occured = False
 
         for aura_type in SIMULTANEOUS_REACTION_PRIORITY[element.type]:
             for aura in self.auras:
                 if aura_type == aura.type:
+                    reaction_occured = True
                     element, aura, result_aura, log = react(element, aura)
                     if aura.gauge <= 0:
                         self.auras.remove(aura)
@@ -56,7 +58,7 @@ class Dummy:
                 break
             # TODO react with freeze aura
 
-        if element.gauge > 0 and element.type not in [ANEMO, GEO]:
+        if not reaction_occured and element.gauge > 0 and element.type not in [ANEMO, GEO]:
             # Aura gauge extension
             cannot_find_the_same_aura = True
             for aura in self.auras:
