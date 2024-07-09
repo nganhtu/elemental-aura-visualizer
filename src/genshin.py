@@ -54,7 +54,7 @@ def decay_rate(gauge):
 
 
 def quicken_decay_rate(quicken_gauge):
-    return 5 * quicken_gauge + 6
+    return (5 * quicken_gauge + 6) / quicken_gauge
 
 
 class Element:

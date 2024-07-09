@@ -94,11 +94,17 @@ class Dummy:
                         self.auras.remove(aura)
                     if result_aura is not None:
                         # TODO check with Freeze and Burning situations
-                        # FIXME "... and refresh Quicken." ~ no evidence yet
-                        for tmp_aura in self.auras:
-                            if tmp_aura.type == result_aura.type:
-                                self.auras.remove(tmp_aura)
-                        self.auras.append(result_aura)
+                        # Quicken evidences : https://youtu.be/Hjf08ZHavgA, https://youtu.be/bKN0e0w-O0g
+                        # Assume that Quicken aura extension worked the same way as Pyro; cannot confirm yet
+                        old_aura_found = False
+                        for old_aura in self.auras:
+                            if not old_aura_found and old_aura.type == result_aura.type:
+                                old_aura_found = True
+                                if old_aura.gauge < result_aura.gauge:
+                                    self.auras.remove(old_aura)
+                                    self.auras.append(result_aura)
+                        if not old_aura_found:
+                            self.auras.append(result_aura)
                     if log is not None:
                         logs.append(log)
                     if element.gauge <= 0:
