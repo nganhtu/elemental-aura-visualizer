@@ -35,6 +35,7 @@ SIMULTANEOUS_REACTION_PRIORITY = {
     # GEO: shattered, clear the Freeze Aura, and applies the attack's element afterwards
 }
 # FIXME DENDRO + (ELECTRO + HYDRO) = ?
+# FIXME PYRO + (QUICKEN + DENDRO) = ?
 # BURNING: 2U, doesn't decay, reacted by HYDRO, ELECTRO, ANEMO, GEO at the same time with underlying PYRO aura
 EC_GAUGE_DECAY = 0.4  # U/s
 EC_TICK_ICD = 1  # s

@@ -19,6 +19,7 @@ class Dummy:
         self.freeze_aura_decay_speed = FREEZE_AURA_STARTING_DECAY_SPEED
 
     def electro_charged_occur(self, happen_time):
+        logs = []
         electro = None
         hydro = None
         for aura in self.auras:
@@ -27,31 +28,32 @@ class Dummy:
             elif aura.type == HYDRO:
                 hydro = aura
         if electro is not None and hydro is not None:
-            log = electro_charged_tick(electro, hydro)
+            logs.append(electro_charged_tick(electro, hydro))
         else:  # EC final tick
-            log = Log(LOG_ELECTRO_CHARGED, 0)
+            logs.append(Log(LOG_ELECTRO_CHARGED, 0))
         self.last_ec_tick_timestamp = happen_time
-        log.happen_time = happen_time
-        return log
+        for log in logs:
+            log.happen_time = happen_time
+        return logs
 
     def electro_charged_update(self):
-        log = None
+        logs = []
         aura_types = [aura.type for aura in self.auras]
         if ELECTRO not in aura_types or HYDRO not in aura_types:
             if self.is_electro_charged:
                 if self.time - self.last_ec_tick_timestamp >= EC_FINAL_TICK_ICD:
-                    log = self.electro_charged_occur(self.time)
+                    logs.extend(self.electro_charged_occur(self.time))
                 self.is_electro_charged = False
-            return log
+            return logs
         # new EC occurred should ignore EC_FINAL_TICK_ICD
         if not self.is_electro_charged:
-            log = self.electro_charged_occur(self.time)
+            logs.extend(self.electro_charged_occur(self.time))
         else:
             internal_time = self.time - self.last_ec_tick_timestamp
             if internal_time >= EC_TICK_ICD:
-                log = self.electro_charged_occur(self.last_ec_tick_timestamp + EC_TICK_ICD)
+                logs.extend(self.electro_charged_occur(self.last_ec_tick_timestamp + EC_TICK_ICD))
         self.is_electro_charged = True
-        return log
+        return logs
 
     def remove_burning_aura(self):
         self.is_burning = False
@@ -61,20 +63,6 @@ class Dummy:
                 return
 
     def burning_occur(self, happen_time):
-        # FIXME nguyên tố Hỏa đặt vào phải phản ứng với các ấn khác trước
-        # pyro = None
-        # for aura in self.auras:
-        #     if  aura.type == PYRO:
-        #         pyro = aura
-        #         break
-        # if pyro is None:
-        #     pyro = Aura(PYRO, AURA_TAX * BURNING_APPLY_PYRO_GAUGE, decay_rate(BURNING_APPLY_PYRO_GAUGE))
-        #     self.auras.append(pyro)
-        # elif pyro.gauge < AURA_TAX * BURNING_APPLY_PYRO_GAUGE:
-        #     pyro.gauge = AURA_TAX * BURNING_APPLY_PYRO_GAUGE
-        #     # Pyro does not have decay rate inheritance
-        #     pyro.decay_rate = decay_rate(BURNING_APPLY_PYRO_GAUGE)
-
         logs = [Log(LOG_BURNING, 0)]
         self.last_burning_tick_timestamp = happen_time
         logs.extend(self.affected_by(Element(PYRO, BURNING_APPLY_PYRO_GAUGE)))
@@ -111,7 +99,7 @@ class Dummy:
         # Continuous reaction updates
         unfiltered_logs = []
         self.time = gametime_clock
-        unfiltered_logs.append(self.electro_charged_update())
+        unfiltered_logs.extend(self.electro_charged_update())
         unfiltered_logs.extend(self.burning_update())
         logs = [log for log in unfiltered_logs if log is not None]
 
