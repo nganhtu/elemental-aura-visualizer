@@ -35,7 +35,8 @@ REACTION_LOG_NAMES = {
     LOG_ELECTRO_CHARGED: 'Electro-Charged',
     LOG_QUICKEN: 'Quicken',
     LOG_SPREAD: 'Spread',
-    LOG_AGGRAVATE: ' Aggravate'
+    LOG_AGGRAVATE: 'Aggravate',
+    LOG_BURNING: 'Burning'
 }
 
 

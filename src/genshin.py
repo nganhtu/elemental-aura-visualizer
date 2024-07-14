@@ -34,13 +34,20 @@ SIMULTANEOUS_REACTION_PRIORITY = {
     PYRO: (ELECTRO, ANEMO, HYDRO, FREEZE, CRYO, QUICKEN, DENDRO)
     # GEO: shattered, clear the Freeze Aura, and applies the attack's element afterwards
 }
+# FIXME DENDRO + (ELECTRO + HYDRO) = ?
 # BURNING: 2U, doesn't decay, reacted by HYDRO, ELECTRO, ANEMO, GEO at the same time with underlying PYRO aura
+EC_GAUGE_DECAY = 0.4  # U/s
+EC_TICK_ICD = 1  # s
+EC_FINAL_TICK_ICD = 0.5  # s
+
+BURNING_AURA_GAUGE = 2  # U
+BURNING_AURA_DECAY_RATE = float('inf')  # s/U
+BURNING_TICK_ICD = 2  # s
+BURNING_APPLY_PYRO_GAUGE = 1  # U
+
 FREEZE_AURA_STARTING_DECAY_SPEED = 0.4  # U/s
 FREEZE_AURA_DECAY_ACCELERATION_RATE = 0.1  # U/s^2
 FREEZE_AURA_RESTORE_ACCELERATION_RATE = -0.2  # U/s^2
-EC_GAUGE_DECAY = 0.4  # U
-EC_TICK_ICD = 1  # s
-EC_FINAL_TICK_ICD = 0.5  # s
 
 
 def decay_rate(gauge):
@@ -68,13 +75,30 @@ class Aura(Element):
         super().__init__(type, gauge)
         self.decay_rate = decay_rate
         self.decay_speed = 1 / self.decay_rate
+        self.original_decay_rate = decay_rate
 
     def update(self, dt):
+        self.original_decay_rate = self.decay_rate
         self.decay_speed = 1 / self.decay_rate
         if self.gauge > 0:
             self.gauge -= self.decay_speed * dt
         if self.gauge < 0:
             self.gauge = 0
+
+    def burning_update(self, dt):
+        if self.type != DENDRO:
+            return
+        self.decay_speed = max(0.4, 2 / self.original_decay_rate)
+        self.decay_rate = 1 / self.decay_speed
+        if self.gauge > 0:
+            self.gauge -= self.decay_speed * dt
+        if self.gauge < 0:
+            self.gauge = 0
+
+    def light_off(self):
+        if self.type != DENDRO:
+            return
+        self.decay_rate = self.original_decay_rate
 
 
 class FreezeAura(Element):
@@ -133,13 +157,14 @@ ELEMENTAL_REACTIONS = (SPREAD, AGGRAVATE, Q_BLOOM, Q_BURNING, F_SWIRL, F_SUPERCO
                        REACTION_BURNING, OVERLOADED, P_CRYSTALLIZE, VAPORIZE, H_SWIRL,
                        REACTION_FROZEN, BLOOM, ELECTRO_CHARGED, H_CRYSTALLIZE, C_CRYSTALLIZE,
                        E_CRYSTALLIZE, E_SWIRL, SUPERCONDUCT, REACTION_QUICKEN, C_SWIRL)
-POST_REACT_AURA_APPLICABLE_REACTIONS = (ELECTRO_CHARGED, SPREAD, AGGRAVATE)
+POST_REACT_AURA_APPLICABLE_REACTIONS = (ELECTRO_CHARGED, SPREAD, AGGRAVATE, REACTION_BURNING)
 
 # The following constants should have opposite sign to the above
-LOG_CODES_COUNTER = 13
+LOG_CODES_COUNTER = 14
 LOG_CODES = (-i - 1 for i in range(LOG_CODES_COUNTER))
 LOG_EXTEND_AURA, LOG_APPLY_AURA, LOG_SWIRL, LOG_CRYSTALLIZE, LOG_MELT, LOG_OVERLOADED, LOG_VAPORIZE, \
-    LOG_BLOOM, LOG_SUPERCONDUCT, LOG_ELECTRO_CHARGED, LOG_QUICKEN, LOG_SPREAD, LOG_AGGRAVATE = LOG_CODES
+    LOG_BLOOM, LOG_SUPERCONDUCT, LOG_ELECTRO_CHARGED, LOG_QUICKEN, LOG_SPREAD, LOG_AGGRAVATE, LOG_BURNING \
+    = LOG_CODES
 
 
 def react(element, aura):
@@ -174,6 +199,9 @@ def react(element, aura):
     # 1
     if reaction == AGGRAVATE:
         return aggravate(element, aura)
+    # 1
+    if reaction == REACTION_BURNING:
+        return burning(element, aura)
 
     return element, aura, None, None
 
@@ -278,3 +306,10 @@ def spread(element, aura):
 
 def aggravate(element, aura):
     return element, aura, None, Log(LOG_AGGRAVATE, 0)
+
+
+def burning(element, aura):
+    burning_aura = Aura(BURNING, BURNING_AURA_GAUGE, BURNING_AURA_DECAY_RATE)
+    return element, aura, burning_aura, None
+
+# TODO trả decay rate nguyên bản lại cho ấn Thảo khi ấn Thiêu Đốt bị dập tắt
