@@ -41,7 +41,8 @@ def init():
     element_pngs = {}
     aura_pngs = {}
     for aura in AURA_NAMES:
-        img = pg.image.load(f"{path.AURAS + AURA_NAMES[aura]}.png")  # not case sensitive
+        # not case sensitive
+        img = pg.image.load(f"{path.AURAS + AURA_NAMES[aura]}.png")
         aura_pngs[aura] = img
         if aura in ELEMENTS:
             element_pngs[aura] = img
@@ -58,7 +59,8 @@ def draw_gauge_btns():
     global board, screen
     font = pg.font.Font(path.FONT['zh-cn'], GAUGE_BTN_SIZE)
     for gauge in AVAILABLE_GAUGES:
-        text = font.render(f"{gauge}U", True, SELECTED_TEXT_COLOR if board.gauge == gauge else TEXT_COLOR)
+        text = font.render(
+            f"{gauge}U", True, SELECTED_TEXT_COLOR if board.gauge == gauge else TEXT_COLOR)
         screen.blit(text, (SCREEN_WIDTH - MARGIN + GAUGE_BTN_PADDING * GAUGE_BTN_POSITION[gauge][0],
                            SCREEN_HEIGHT + (MARGIN + GAUGE_BTN_BORDER) * GAUGE_BTN_POSITION[gauge][1]))
 
@@ -66,10 +68,12 @@ def draw_gauge_btns():
 def draw_gametime_btn():
     global gametime, screen
     font = pg.font.Font(path.FONT['zh-cn'], GAMETIME_BTN_SIZE)
-    text = font.render(f"{gametime.clock:.2f}", True, SELECTED_TEXT_COLOR if gametime.isPaused else TEXT_COLOR)
+    text = font.render(f"{gametime.clock:.2f}", True,
+                       SELECTED_TEXT_COLOR if gametime.isPaused else TEXT_COLOR)
     screen.blit(text, (SCREEN_WIDTH - MARGIN - GAUGE_BTN_PADDING * TIME_L_MULT,
                        SCREEN_HEIGHT - MARGIN - GAUGE_BTN_BORDER))
-    text = font.render("s", True, SELECTED_TEXT_COLOR if gametime.isPaused else TEXT_COLOR)
+    text = font.render(
+        "s", True, SELECTED_TEXT_COLOR if gametime.isPaused else TEXT_COLOR)
     screen.blit(text, (SCREEN_WIDTH - MARGIN - GAUGE_BTN_PADDING * TIME_R_MULT,
                        SCREEN_HEIGHT - MARGIN - GAUGE_BTN_BORDER))
 
@@ -85,7 +89,8 @@ def draw_aura_bars_and_descriptions():
             aura.gauge * RULER_W / MAX_AURA_GAUGE_AVAILABLE, RULER_H))
         # draw aura descriptions
         font = pg.font.Font(path.FONT['zh-cn'], FONT_SIZE_DESCRIPTION)
-        text = font.render(f"{AURA_NAMES[aura.type]} aura, decay rate: {aura.decay_rate:.2f}s, current gauge: {aura.gauge:.2f}U", True, TEXT_COLOR)
+        text = font.render(f"{AURA_NAMES[aura.type]} aura, decay rate: {
+                           aura.decay_rate:.2f}s, current gauge: {aura.gauge:.2f}U", True, TEXT_COLOR)
         screen.blit(text, (MARGIN, RULER_PADDING_H * (current_ruler - 0.3)))
 
 
@@ -108,8 +113,11 @@ def draw_logs():
     visible_logs.reverse()
     font = pg.font.Font(path.FONT['zh-cn'], FONT_SIZE_LOG)
     for i in range(len(visible_logs)):
-        text = font.render(f"{visible_logs[i].happen_time:.2f}s: {REACTION_LOG_NAMES[visible_logs[i].reaction_notation]} {visible_logs[i].react_gauge:.2f}U", True, TEXT_COLOR)  # TODO localization
-        screen.blit(text, (RULER_W + MARGIN, RULER_AREA_H * (1 - i / VISIBLE_LOGS_MAX_LINES)))
+        text = font.render(f"{visible_logs[i].happen_time:.2f}s:
+                           {REACTION_LOG_NAMES[visible_logs[i].reaction_notation]} {
+                           visible_logs[i].react_gauge:.2f}U", True, TEXT_COLOR)  # TODO localization
+        screen.blit(text, (RULER_W + MARGIN, RULER_AREA_H *
+                    (1 - i / VISIBLE_LOGS_MAX_LINES)))
 
 
 def draw_screen():
@@ -129,8 +137,10 @@ def main():
     init()
 
     # Prepare game objects
-    play_audio = {audio_name: pg.mixer.Sound(path.AUDIO[audio_name]).play for audio_name in path.AUDIO}
-    play_audio.update({sound_name: pg.mixer.Sound(path.SOUND[sound_name]).play for sound_name in path.SOUND})
+    play_audio = {audio_name: pg.mixer.Sound(
+        path.AUDIO[audio_name]).play for audio_name in path.AUDIO}
+    play_audio.update({sound_name: pg.mixer.Sound(
+        path.SOUND[sound_name]).play for sound_name in path.SOUND})
     board = Board()
     gametime = Gametime()
     dummy = Dummy()
@@ -155,7 +165,8 @@ def main():
 
             if res in RES_CODES_BOARD:
                 if res == FLIP_GAMETIME:
-                    play_audio['open_win.mp3']() if gametime.isPaused else play_audio['close_win.mp3']()
+                    play_audio['open_win.mp3'](
+                    ) if gametime.isPaused else play_audio['close_win.mp3']()
                     gametime.isPaused = not gametime.isPaused
                 elif res == SET_GAUGE:
                     play_audio['switch_type.mp3']()
@@ -166,7 +177,8 @@ def main():
                         ic("Gauge is not chosen yet~")
                     else:
                         play_audio['switch_task.mp3']()
-                        recent_logs = dummy.affected_by(Element(board.element, board.gauge))
+                        recent_logs = dummy.affected_by(
+                            Element(board.element, board.gauge))
                         logs.extend(recent_logs)
 
         # Wipe away anything from last frame; then draw current frame
