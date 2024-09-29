@@ -113,11 +113,12 @@ def draw_logs():
     visible_logs.reverse()
     font = pg.font.Font(path.FONT['zh-cn'], FONT_SIZE_LOG)
     for i in range(len(visible_logs)):
-        text = font.render(f"{visible_logs[i].happen_time:.2f}s:
-                           {REACTION_LOG_NAMES[visible_logs[i].reaction_notation]} {
-                           visible_logs[i].react_gauge:.2f}U", True, TEXT_COLOR)  # TODO localization
-        screen.blit(text, (RULER_W + MARGIN, RULER_AREA_H *
-                    (1 - i / VISIBLE_LOGS_MAX_LINES)))
+        text = font.render(
+            f"{visible_logs[i].happen_time:.2f}s: \
+            {REACTION_LOG_NAMES[visible_logs[i].reaction_notation]} \
+            {visible_logs[i].react_gauge:.2f}U", True, TEXT_COLOR)  # TODO localization
+        screen.blit(text, (RULER_W + MARGIN,
+                           RULER_AREA_H * (1 - i / VISIBLE_LOGS_MAX_LINES)))
 
 
 def draw_screen():
